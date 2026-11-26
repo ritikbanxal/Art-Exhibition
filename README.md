@@ -1,5 +1,7 @@
 # Art of Rikk — Exhibition Website
 
+Made by Rikk.
+
 An exhibition site with pages for the gallery, About, FAQ, Media Coverage and Contact.
 All content lives in simple JSON files so an admin panel can edit it.
 
