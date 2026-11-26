@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1920" viewBox="0 0 1920 1920">
+<defs>
+  <radialGradient id="bg" cx="50%" cy="50%" r="70%"><stop offset="0" stop-color="#22121f"/><stop offset=".55" stop-color="#0d0a10"/><stop offset="1" stop-color="#050507"/></radialGradient>
+  <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+    <stop offset=".62" stop-color="#d7345d" stop-opacity=".95"/>
+    <stop offset=".75" stop-color="#a02a6a" stop-opacity=".45"/>
+    <stop offset="1" stop-color="#3b1640" stop-opacity="0"/>
+  </radialGradient>
+  <filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="28"/></filter>
+</defs>
+<rect width="100%" height="100%" fill="url(#bg)"/>
+<g fill="none" stroke="#ffffff" stroke-opacity=".05" stroke-width="1.2"><circle cx="960" cy="960" r="520"/><circle cx="960" cy="960" r="566"/><circle cx="960" cy="960" r="612"/><circle cx="960" cy="960" r="658"/><circle cx="960" cy="960" r="704"/><circle cx="960" cy="960" r="750"/><circle cx="960" cy="960" r="796"/><circle cx="960" cy="960" r="842"/><circle cx="960" cy="960" r="888"/><circle cx="960" cy="960" r="934"/><circle cx="960" cy="960" r="980"/><circle cx="960" cy="960" r="1026"/><circle cx="960" cy="960" r="1072"/><circle cx="960" cy="960" r="1118"/><circle cx="960" cy="960" r="1164"/><circle cx="960" cy="960" r="1210"/><circle cx="960" cy="960" r="1256"/><circle cx="960" cy="960" r="1302"/><circle cx="960" cy="960" r="1348"/><circle cx="960" cy="960" r="1394"/></g>
+<circle cx="960" cy="960" r="560" fill="url(#glow)" filter="url(#blur)"/>
+<circle cx="960" cy="960" r="352" fill="#050506"/>
+<circle cx="960" cy="960" r="352" fill="none" stroke="#ffd9c7" stroke-opacity=".85" stroke-width="2.5"/>
+<circle cx="732" cy="698" r="9" fill="#fff1e8"/>
+<g font-family="'Helvetica Neue', 'Segoe UI', Helvetica, Arial, sans-serif" text-anchor="middle" fill="#fff4ee">
+  <text x="972" y="942" font-size="60" font-weight="300" letter-spacing="22">THE LIVING</text>
+  <text x="972" y="1022" font-size="60" font-weight="300" letter-spacing="22">CANVAS</text>
+  <line x1="925" y1="1070" x2="995" y2="1070" stroke="#d7345d" stroke-width="2"/>
+</g>
+</svg>
