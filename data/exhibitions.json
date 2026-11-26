@@ -1,0 +1,43 @@
+[
+  {
+    "year": 2025,
+    "subtitle": "An exhibition featuring science-based, science-generated and science-inspired artworks made by our community",
+    "cover": "",
+    "intro": [
+      "The 2025 exhibition opened on May 8, 2025 with a reception attended by over 250 guests. If you missed the opening, or would like to revisit the works, the exhibition remains on view through the 2025–26 academic year."
+    ],
+    "venue": {
+      "name": "Main Atrium, Your Venue",
+      "address": "123 Example Street, City",
+      "mapUrl": "https://maps.google.com"
+    },
+    "dates": "May 8, 2025 – June 2026",
+    "hours": "Open daily, 9am – 6pm · Free entry",
+    "essayTitle": "Exhibition text",
+    "essay": [
+      "This year's exhibition marks our tenth show and twentieth year of celebrating the meeting point of science and art — two of the most essential expressions of human creativity.",
+      "Powerful imaging and modelling tools capture our world in new ways, producing striking images by intention or by accident. Seen as art, these works expand our understanding of the human experience, complicate our relationship with the natural world, and redefine who we think of as an artist.",
+      "The works on show span an array of analog, digital and computer-generated methods, and take breathtaking leaps in scale — from microns to light years.",
+      "Above all, they show that science-generated art does more than communicate methods and discoveries. It reminds us how restless, curious and human the scientific imagination can be."
+    ]
+  },
+  {
+    "year": 2024,
+    "subtitle": "Works from the 2024 open call",
+    "cover": "",
+    "intro": [
+      "The 2024 exhibition brought together images and animations from across our community."
+    ],
+    "venue": {
+      "name": "Your Venue",
+      "address": "",
+      "mapUrl": ""
+    },
+    "dates": "Spring 2024",
+    "hours": "",
+    "essayTitle": "Exhibition text",
+    "essay": [
+      "Replace this with the curatorial text for the 2024 exhibition."
+    ]
+  }
+]

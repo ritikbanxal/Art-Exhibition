@@ -1,0 +1,98 @@
+/* =========================================================
+   Contact page
+   ========================================================= */
+:root {
+  /* swap for an image: url("assets/contact.jpg") */
+  --contact-img: radial-gradient(ellipse at 30% 60%, #2a3b2a 0%, #141a14 45%, #070807 100%);
+}
+
+.contact-banner { height: 50vh; background: var(--contact-img) center/cover; }
+
+.eyebrow {
+  color: var(--accent);
+  font-size: 13px; font-weight: 400;
+  letter-spacing: 3px; text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+/* ---------- Intro + detail cards ---------- */
+.contact-main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 100px 30px 90px;
+}
+.contact-intro { max-width: 680px; margin-bottom: 50px; }
+.contact-intro h2,
+.submit h2 {
+  color: #222;
+  font-size: 32px; font-weight: 300;
+  letter-spacing: 2px;
+  line-height: 1.3;
+  margin-bottom: 18px;
+}
+
+.contact-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.c-card {
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 30px 28px;
+  border: 1px solid #ececec;
+  border-radius: 4px;
+  background: #fff;
+  transition: border-color .25s, box-shadow .25s, transform .25s;
+}
+a.c-card:hover, .c-card:hover {
+  border-color: #e3e3e3;
+  box-shadow: 0 12px 30px rgba(0,0,0,.06);
+  transform: translateY(-2px);
+}
+.c-icon {
+  display: grid; place-items: center;
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  background: #fbeef1;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+.c-label {
+  font-size: 12px; font-weight: 400;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: #999;
+}
+.c-value {
+  font-size: 18px; font-weight: 300;
+  color: #222;
+  word-break: break-word;
+}
+.c-value a:hover, a.c-card:hover .c-value { color: var(--accent); }
+
+/* ---------- Submit section ---------- */
+.submit { background: #f7f7f8; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
+.submit-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 90px 30px;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+.submit-action { text-align: center; }
+.submit-action .btn { padding: 14px 34px; }
+.submit-note { margin-top: 12px; font-size: 13px; color: #999; }
+.btn.is-disabled { opacity: .45; pointer-events: none; }
+
+/* (Media band styles live in style.css — shared with the Media page) */
+
+/* ---------- Responsive ---------- */
+@media (max-width: 960px) {
+  .contact-banner { height: 40vh; min-height: 300px; }
+  .contact-main { padding: 60px 20px; }
+  .contact-intro h2, .submit h2 { font-size: 24px; }
+  .contact-cards { grid-template-columns: 1fr; }
+  .submit-inner { grid-template-columns: 1fr; gap: 30px; padding: 60px 20px; }
+  .submit-action { text-align: left; }
+}

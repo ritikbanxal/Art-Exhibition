@@ -1,0 +1,26 @@
+{
+  "name": "Art of Rikk",
+  "tagline": "An exhibition celebrating the meeting point of art and science.",
+  "email": "bananabread@art.com",
+  "location": "Your venue, City",
+  "instagram": "#",
+  "youtube": "#",
+  "submissionForm": "",
+  "introImages": [
+    {
+      "image": "/uploads/intro-1-orbit.svg"
+    },
+    {
+      "image": "/uploads/intro-2-interference.svg"
+    },
+    {
+      "image": "/uploads/intro-3-flow.svg"
+    },
+    {
+      "image": "/uploads/intro-4-cells.svg"
+    },
+    {
+      "image": "/uploads/intro-5-eclipse.svg"
+    }
+  ]
+}

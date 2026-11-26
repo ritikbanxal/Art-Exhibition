@@ -1,0 +1,13 @@
+# Dependencies
+node_modules/
+
+# Private settings (password, secrets) — set these on the host instead
+.env
+
+# Admin save backups and temp files
+data/backups/
+*.tmp
+
+# Local tool settings and the old first-draft copy of the homepage
+.claude/
+art-site/

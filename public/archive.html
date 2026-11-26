@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Exhibition Archive – Art of Rikk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@100;200;300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="archive.css" />
+  <link rel="stylesheet" href="/preloader.css" />
+  <script src="/site-config.js"></script>
+</head>
+<body>
+  <!-- Intro animation + shutter page transitions (must stay first in <body>) -->
+  <script src="/preloader.js"></script>
+
+  <!-- Navbar is inserted here by script.js -->
+  <div id="site-header"></div>
+
+  <!-- ============ BANNER ============ -->
+  <header class="page-banner ar-banner">
+    <div class="page-banner-overlay"></div>
+    <div class="page-banner-content">
+      <h1 id="arTitle">Exhibition Archive</h1>
+      <p class="page-banner-sub" id="arSub">Every exhibition, year by year</p>
+    </div>
+  </header>
+
+  <!-- ============ YEAR CARDS ============ -->
+  <section class="ar-wrap">
+    <p class="ar-count" id="arCount"></p>
+    <div class="ar-grid" id="arGrid"></div>
+    <p class="ar-empty" id="arEmpty" hidden>No earlier exhibitions yet.</p>
+    <div class="ar-back" id="arBack" hidden>
+      <a class="btn btn-accent" href="/archive">View the full archive</a>
+    </div>
+  </section>
+
+  <!-- Footer is inserted here by script.js -->
+  <div id="site-footer"></div>
+  <script src="script.js"></script>
+  <script src="archive.js"></script>
+</body>
+</html>

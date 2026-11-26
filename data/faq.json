@@ -1,0 +1,107 @@
+[
+  {
+    "category": "Submitting",
+    "items": [
+      {
+        "q": "What sort of content should I submit?",
+        "a": "Anything made while doing research or while observing a scientific subject. That could be imagery from microscopes, telescopes or high-speed cameras; visualizations of data, simulations or mathematical structures; or illustrations and interpretations of natural phenomena.\n\nIf you think it sits somewhere between science and art, send it in."
+      },
+      {
+        "q": "What if my entry is not from a formal lab or research project?",
+        "a": "That's fine. Work inspired by science, made at home, in the field or in a studio is welcome, as long as there is a clear connection to a scientific idea, process or observation. Tell us about that connection in your description."
+      },
+      {
+        "q": "How recent should my work be?",
+        "a": "We prefer work created within the last few years, but older pieces that have never been exhibited are also considered."
+      },
+      {
+        "q": "What sort of media do you accept?",
+        "a": "Still images, videos and animations. Physical objects and installations are not accepted at this time."
+      },
+      {
+        "q": "Can I submit more than one image, animation or video?",
+        "a": "Yes. You may submit up to three works. Please submit each one separately through the submission form."
+      },
+      {
+        "q": "How much does it cost to submit?",
+        "a": "Nothing — submitting is free."
+      }
+    ]
+  },
+  {
+    "category": "Eligibility",
+    "items": [
+      {
+        "q": "Who is eligible to participate?",
+        "a": "Students, researchers, staff, faculty and members of our community. Describe your connection in the submission form."
+      },
+      {
+        "q": "What about alumni? Am I eligible to submit?",
+        "a": "Yes, alumni are welcome to submit work."
+      }
+    ]
+  },
+  {
+    "category": "Images",
+    "items": [
+      {
+        "q": "What file format do you accept for images?",
+        "a": "JPG, PNG or TIFF. Please do not compress or watermark the image."
+      },
+      {
+        "q": "What size or resolution should my image be?",
+        "a": "As large as you have — ideally at least 3000 pixels on the longest side, so it can be printed at exhibition size."
+      },
+      {
+        "q": "What if my image comes from an instrument that only produces low resolution?",
+        "a": "Submit it anyway and mention the instrument in your description. Our team will tell you if it can be printed at a suitable size."
+      },
+      {
+        "q": "Do you accept GIFs?",
+        "a": "Animated GIFs should be submitted as videos (MP4). Still GIFs are accepted as images."
+      },
+      {
+        "q": "Where will accepted images be exhibited?",
+        "a": "Accepted images are printed and shown in the physical exhibition, and also appear in the online gallery on this website."
+      }
+    ]
+  },
+  {
+    "category": "Videos",
+    "items": [
+      {
+        "q": "How should I submit a video?",
+        "a": "Upload it to YouTube, Vimeo or Google Drive and paste the link into the submission form. Make sure the link can be viewed by anyone who has it."
+      },
+      {
+        "q": "What is the maximum length of a video?",
+        "a": "Three minutes. Shorter pieces usually work best in an exhibition space."
+      },
+      {
+        "q": "What video quality, resolution or frame rate should I use?",
+        "a": "At least 1080p (1920×1080). Any standard frame rate (24, 25, 30 or 60 fps) is fine."
+      },
+      {
+        "q": "Can I submit VR or 360° videos?",
+        "a": "Not at the moment — we can only show standard flat videos."
+      },
+      {
+        "q": "Where and how will accepted videos be exhibited?",
+        "a": "Videos play on a loop on screens in the exhibition space, and are embedded in the online gallery."
+      },
+      {
+        "q": "What if my video has audio?",
+        "a": "Videos are usually shown without sound in the gallery, so make sure your piece still works on mute. Audio will play in the online gallery."
+      }
+    ]
+  },
+  {
+    "category": "Other",
+    "items": [
+      {
+        "q": "What if I have a question that is not answered here?",
+        "a": "Email us at the address on the Contact page and we'll get back to you."
+      }
+    ]
+  }
+]

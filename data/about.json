@@ -1,0 +1,64 @@
+{
+  "mission": {
+    "eyebrow": "Our mission",
+    "headline": "Where scientific discovery meets artistic vision.",
+    "paragraphs": [
+      "This exhibition explores the meeting point of science and art. Works are chosen for their beauty, for their scientific or technical interest, and for their power to spark curiosity across disciplines, cultures and ages.",
+      "Modern imaging and modelling tools capture our world in ways that were impossible a generation ago — sometimes by design, sometimes by happy accident. Seen as art, these images change how we understand nature, and widen who we think of as an artist.",
+      "We invite scientists to see their research with fresh eyes, artists to explore new materials and methods, and everyone else to step into two fields that can often feel out of reach."
+    ]
+  },
+  "founded": 2005,
+  "pillars": [
+    {
+      "title": "Aesthetic excellence",
+      "text": "Striking compositions, colour and form that hold your attention on their own — before you know anything about the science behind them."
+    },
+    {
+      "title": "Scientific interest",
+      "text": "Works rooted in real research, observation or data, whose story deepens the more you learn about how they were made."
+    },
+    {
+      "title": "Inspiring creativity",
+      "text": "Pieces that speak across disciplines, languages and ages, and invite new conversations between artists, scientists and the public."
+    }
+  ],
+  "statement": "Science and art are two of the most human ways we have of making sense of the world. This exhibition celebrates what happens when they meet.",
+  "timeline": [
+    { "year": "2005", "title": "The first exhibition", "text": "A small collaboration between researchers and artists opens with a handful of images printed in a hallway." },
+    { "year": "2012", "title": "Moving images", "text": "Videos and animations join the exhibition for the first time." },
+    { "year": "2018", "title": "Going online", "text": "Every exhibited work is published in an online gallery, reaching visitors around the world." },
+    { "year": "2025", "title": "Our biggest show yet", "text": "A record number of submissions from students, researchers, staff and alumni." }
+  ],
+  "organizers": [
+    { "name": "Organizer Name", "role": "Creative Director" },
+    { "name": "Organizer Name", "role": "Studio Manager" },
+    { "name": "Organizer Name", "role": "Professor of Computer Science" },
+    { "name": "Organizer Name", "role": "Lecturer in Visual Arts" }
+  ],
+  "sponsors": [
+    "Department of Physics",
+    "Department of Chemistry",
+    "Computer Science",
+    "Astrophysical Sciences",
+    "Geosciences",
+    "Psychology",
+    "Materials Institute",
+    "Environmental Institute",
+    "Office of Research",
+    "Art & Archaeology"
+  ],
+  "thanks": [
+    { "name": "Person Name", "role": "Print production and mounting" },
+    { "name": "Person Name", "role": "Print coordination" },
+    { "name": "Person Name", "role": "Project management" },
+    { "name": "Person Name", "role": "Event and communications" },
+    { "name": "Person Name", "role": "Studio support" },
+    { "name": "Person Name", "role": "Graduate assistant" }
+  ],
+  "credits": [
+    { "name": "Your Name", "role": "Website design and development" },
+    { "name": "Designer Name", "role": "Logo design" },
+    { "name": "Unsplash.com", "role": "Stock imagery" }
+  ]
+}

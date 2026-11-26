@@ -1,0 +1,92 @@
+[
+  {
+    "id": "m-mwxdbqg5cwzw",
+    "outlet": "test",
+    "title": "test",
+    "url": "",
+    "year": 2023,
+    "type": "audio",
+    "featured": false,
+    "quote": ""
+  },
+  {
+    "id": "m1",
+    "outlet": "Science Weekly",
+    "title": "When research becomes art: inside this year's exhibition",
+    "url": "#",
+    "year": 2025,
+    "type": "article",
+    "featured": true,
+    "quote": "An exhibition that challenges scientists to capture the fleeting moments when science becomes art."
+  },
+  {
+    "id": "m2",
+    "outlet": "Design Journal",
+    "title": "The most beautiful lab images of the year",
+    "url": "#",
+    "year": 2025,
+    "type": "article",
+    "featured": true,
+    "quote": "Proof that the microscope can be as expressive as the paintbrush."
+  },
+  {
+    "id": "m3",
+    "outlet": "City Radio",
+    "title": "Interview with the organizers",
+    "url": "#",
+    "year": 2025,
+    "type": "audio",
+    "featured": false,
+    "quote": ""
+  },
+  {
+    "id": "m4",
+    "outlet": "Campus News",
+    "title": "Exhibition opens to record crowds",
+    "url": "#",
+    "year": 2025,
+    "type": "article",
+    "featured": false,
+    "quote": ""
+  },
+  {
+    "id": "m5",
+    "outlet": "Visual Culture Review",
+    "title": "Art and science, side by side",
+    "url": "#",
+    "year": 2024,
+    "type": "article",
+    "featured": true,
+    "quote": "A rare space where curiosity and beauty meet on equal terms."
+  },
+  {
+    "id": "m6",
+    "outlet": "Tech Today",
+    "title": "Video: a walk through the gallery",
+    "url": "#",
+    "year": 2024,
+    "type": "video",
+    "featured": false,
+    "quote": ""
+  },
+  {
+    "id": "m7",
+    "outlet": "The Daily Herald",
+    "title": "Local researchers win art prize",
+    "url": "#",
+    "year": 2024,
+    "type": "article",
+    "featured": false,
+    "quote": ""
+  },
+  {
+    "id": "m8",
+    "outlet": "University Bulletin",
+    "title": "Announcing a new interdisciplinary exhibition",
+    "url": "#",
+    "year": 2023,
+    "type": "pdf",
+    "featured": false,
+    "quote": ""
+  }
+]

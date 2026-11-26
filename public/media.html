@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Media Coverage – Art of Rikk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@100;200;300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="media.css" />
+  <link rel="stylesheet" href="/preloader.css" />
+  <script src="/site-config.js"></script>
+</head>
+<body>
+  <!-- Intro animation + shutter page transitions (must stay first in <body>) -->
+  <script src="/preloader.js"></script>
+
+  <!-- Navbar is inserted here by script.js -->
+  <div id="site-header"></div>
+
+  <!-- ============ BANNER ============ -->
+  <header class="page-banner md-banner">
+    <div class="page-banner-overlay"></div>
+    <div class="page-banner-content">
+      <h1>Media Coverage</h1>
+      <p class="page-banner-sub">Press, features and interviews about the exhibition</p>
+    </div>
+  </header>
+
+  <!-- ============ FEATURED QUOTES ============ -->
+  <section class="md-featured" id="featuredSection" hidden>
+    <div class="md-container">
+      <div class="md-head reveal">
+        <p class="md-eyebrow">In the press</p>
+        <h2>What they're saying</h2>
+      </div>
+      <div class="md-quotes" id="quotes"></div>
+    </div>
+  </section>
+
+  <!-- ============ ALL COVERAGE ============ -->
+  <section class="md-archive">
+    <div class="md-container">
+      <div class="md-head reveal">
+        <p class="md-eyebrow">Archive</p>
+        <h2>All coverage</h2>
+      </div>
+
+      <div class="md-toolbar">
+        <div class="md-filters" id="filters" role="tablist" aria-label="Filter by year"></div>
+        <span class="md-count" id="count"></span>
+      </div>
+
+      <div id="archive"></div>
+      <p class="md-empty" id="empty" hidden>No coverage has been added yet.</p>
+    </div>
+  </section>
+
+  <!-- ============ PRESS ENQUIRIES ============ -->
+  <section class="media-band parallax">
+    <div class="media-band-overlay"></div>
+    <div class="media-band-inner">
+      <p class="media-band-text">
+        If you're a member of the media and would like to request permission to
+        reprint images, please contact the organizers.
+      </p>
+      <p class="media-band-sub">Higher resolution images are available upon request.</p>
+      <a class="btn btn-light" data-site-email-link href="mailto:bananabread@art.com">Email the Organizers</a>
+    </div>
+  </section>
+
+  <!-- Footer is inserted here by script.js -->
+  <div id="site-footer"></div>
+  <script src="script.js"></script>
+  <script src="media.js"></script>
+</body>
+</html>

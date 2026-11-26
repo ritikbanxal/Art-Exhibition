@@ -1,0 +1,146 @@
+/* =========================================================
+   Preloader + shutter page transitions
+   First visit:  name rises → artworks flash in a frame →
+                 frame grows to full screen → shutter panels lift
+   Next pages:   quick shutter lift on arrival, shutter drop on leave
+   ========================================================= */
+html.pl-active, html.pl-active body { overflow: hidden; }
+
+.pl {
+  position: fixed; inset: 0; z-index: 10000;
+  color: #fff;
+  font-family: "Kanit", sans-serif;
+}
+.pl.done { pointer-events: none; }
+
+/* ---------- Shutter panels ---------- */
+.pl-cols { position: absolute; inset: 0; display: flex; }
+.pl-cols span {
+  flex: 1;
+  height: 100%;
+  margin-right: -1px;                 /* no hairline gaps between panels */
+  background-color: #0e0e10;
+  background-repeat: no-repeat;
+  transition: transform 1s cubic-bezier(.76, 0, .24, 1);
+  transition-delay: calc(var(--i) * 70ms);
+  will-change: transform;
+}
+.pl.lift .pl-cols span { transform: translateY(-101%); }
+
+/* Leaving a page: panels rise from the bottom to cover it */
+.pl-leave .pl-cols span { transform: translateY(101%); transition-duration: .6s; transition-delay: calc(var(--i) * 45ms); }
+.pl-leave.cover .pl-cols span { transform: none; }
+
+/* ---------- Stage (first visit only) ---------- */
+.pl-stage {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 26px;
+  padding: 20px;
+}
+
+.pl-bar { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,.08); }
+.pl-bar i { display: block; height: 100%; width: 0; background: #d7345d; }
+
+/* Site name: each letter slides up out of a mask */
+.pl-name {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  overflow: hidden;
+  font-size: clamp(22px, 3.6vw, 42px); font-weight: 200;
+  letter-spacing: .38em; text-transform: uppercase;
+  padding-left: .38em;                /* balances the trailing letter-spacing */
+  line-height: 1.2;
+}
+.pl-name span {
+  display: inline-block;
+  transform: translateY(115%);
+  transition: transform 1s cubic-bezier(.2, .75, .2, 1);
+  transition-delay: calc(.1s + var(--i) * 45ms);
+}
+.pl-name span.sp { width: .5em; }
+.pl.in .pl-name span { transform: none; }
+
+/* Frame that opens like a shutter, then shows artworks one by one */
+.pl-frame {
+  position: relative;
+  width: min(290px, 58vw);
+  aspect-ratio: 3 / 4;
+  padding: 8px;
+  border: 1px solid rgba(255,255,255,.3);
+  clip-path: inset(50% 0 50% 0);
+  transition: clip-path 1.1s cubic-bezier(.76, 0, .24, 1) .25s;
+}
+.pl.in .pl-frame { clip-path: inset(0); }
+.pl-imgs { position: relative; width: 100%; height: 100%; overflow: hidden; background: #1b1b1f; }
+.pl-img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  clip-path: inset(100% 0 0 0);
+  transform: scale(1.35);
+  transition: clip-path .75s cubic-bezier(.76, 0, .24, 1), transform 1.4s cubic-bezier(.2, .7, .2, 1);
+}
+.pl-img.show { clip-path: inset(0); transform: scale(1); }
+
+.pl-caption {
+  font-size: 12px; font-weight: 300;
+  letter-spacing: .32em; text-transform: uppercase;
+  color: rgba(255,255,255,.6);
+  opacity: 0; transform: translateY(12px);
+  transition: opacity .8s .7s, transform .8s .7s;
+}
+.pl.in .pl-caption { opacity: 1; transform: none; }
+
+/* Counter bottom-right, label bottom-left */
+.pl-count {
+  position: absolute; right: 4vw; bottom: 3.5vh;
+  font-size: clamp(54px, 9vw, 130px); font-weight: 100; line-height: .9;
+  font-variant-numeric: tabular-nums;
+}
+.pl-count sup { font-size: .22em; color: #d7345d; margin-left: 4px; vertical-align: top; }
+.pl-label {
+  position: absolute; left: 4vw; bottom: 4vh;
+  font-size: 11px; font-weight: 300;
+  letter-spacing: .3em; text-transform: uppercase;
+  color: rgba(255,255,255,.5);
+}
+
+/* Exit: everything except the frame drifts up and fades */
+.pl.out :is(.pl-name, .pl-caption, .pl-count, .pl-label, .pl-bar) {
+  opacity: 0; transform: translateY(-24px);
+  transition: opacity .45s ease, transform .6s ease;
+}
+.pl.out .pl-frame { border-color: transparent; transition: border-color .3s; }
+
+/* Full-screen image that grows out of the frame */
+.pl-zoom {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  transition: clip-path 1s cubic-bezier(.76, 0, .24, 1);
+}
+
+/* ---------- Page entrance after the shutter lifts ---------- */
+html.pl-active :is(.hero-content, .page-banner-content) > * {
+  opacity: 0; transform: translateY(40px);
+}
+html.pl-reveal :is(.hero-content, .page-banner-content) > * {
+  opacity: 1; transform: none;
+  transition: opacity 1s ease, transform 1.2s cubic-bezier(.2, .7, .2, 1);
+}
+html.pl-reveal :is(.hero-content, .page-banner-content) > :nth-child(1) { transition-delay: .35s; }
+html.pl-reveal :is(.hero-content, .page-banner-content) > :nth-child(2) { transition-delay: .48s; }
+html.pl-reveal :is(.hero-content, .page-banner-content) > :nth-child(3) { transition-delay: .6s; }
+html.pl-reveal :is(.hero-content, .page-banner-content) > :nth-child(4) { transition-delay: .72s; }
+html.pl-active .hero, html.pl-active .page-banner { transform: scale(1.06); }
+html.pl-reveal .hero, html.pl-reveal .page-banner { transform: none; transition: transform 1.8s cubic-bezier(.2, .7, .2, 1); }
+
+@media (max-width: 700px) {
+  .pl-stage { gap: 20px; }
+  .pl-label { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pl { display: none; }
+  html.pl-active, html.pl-active body { overflow: auto; }
+  html.pl-active :is(.hero-content, .page-banner-content) > * { opacity: 1; transform: none; }
+}

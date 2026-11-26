@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Art of Rikk – Exhibition</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@100;200;300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="/preloader.css" />
+  <script src="/site-config.js"></script>
+</head>
+<body>
+  <!-- Intro animation + shutter page transitions (must stay first in <body>) -->
+  <script src="/preloader.js"></script>
+
+  <!-- Navbar is inserted here by script.js -->
+  <div id="site-header"></div>
+
+  <!-- ============ HERO (full-screen background video + centered text) ============ -->
+  <header class="hero">
+    <!-- Put your own looping clip at public/assets/hero.mp4. If missing, the gradient shows instead. -->
+    <video class="hero-video" autoplay muted loop playsinline>
+      <source src="assets/hero.mp4" type="video/mp4" />
+    </video>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <p class="hero-kicker">A [Your Organization] Exhibition</p>
+      <h1 data-site-name>Art of Rikk</h1>
+      <p class="hero-sub">Browse works by this year's finalists and prize winners</p>
+      <a href="/exhibition" class="btn btn-light">View Exhibition</a>
+    </div>
+  </header>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="about parallax" id="about">
+    <div class="about-inner">
+      <h2>About <span data-site-name>Art of Rikk</span></h2>
+      <p>
+        Replace this paragraph with your own introduction. Explain what the
+        exhibition is, how works are selected, and why the meeting point of
+        art and science matters to your community.
+      </p>
+      <p>
+        A second paragraph can describe the tools and techniques behind the
+        works — microscopes, simulations, sensors — and how images made for
+        research can become something people stop and look at as art.
+      </p>
+      <p>
+        Close with a one-line statement of purpose for the exhibition.
+      </p>
+      <a href="/about" class="btn btn-accent">Discover More</a>
+    </div>
+  </section>
+
+  <!-- ============ QUOTE BAND ============ -->
+  <section class="quote parallax">
+    <div class="quote-overlay"></div>
+    <div class="quote-inner">
+      <!-- Filled automatically with the first "featured" quote from data/media.json -->
+      <blockquote>
+        <span id="homeQuote">“Put a short press quote about your exhibition here.”</span>
+        <cite id="homeQuoteOutlet">–Publication Name</cite>
+      </blockquote>
+      <a href="/media" class="btn btn-light">Read Media Coverage</a>
+    </div>
+  </section>
+
+  <!-- Footer is inserted here by script.js -->
+  <div id="site-footer"></div>
+  <script src="script.js"></script>
+  <script>
+    // Homepage quote band ← first featured press quote
+    fetch("/api/media")
+      .then((r) => r.json())
+      .then((list) => {
+        const q = list.find((m) => m.featured && m.quote);
+        if (!q) return;
+        document.getElementById("homeQuote").textContent = `“${q.quote}”`;
+        document.getElementById("homeQuoteOutlet").textContent = `–${q.outlet}`;
+      })
+      .catch(() => {});
+  </script>
+</body>
+</html>
