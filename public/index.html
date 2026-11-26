@@ -8,9 +8,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@100;200;300;400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="home.css" />
   <link rel="stylesheet" href="/cursor.css" />
   <link rel="stylesheet" href="/preloader.css" />
   <script src="/site-config.js"></script>
+  <!-- three.js is served from our own server (see server.js → /vendor/three) -->
+  <script type="importmap">
+    { "imports": { "three": "/vendor/three/three.module.js" } }
+  </script>
 </head>
 <body>
   <!-- Intro animation + shutter page transitions (must stay first in <body>) -->
@@ -19,12 +24,9 @@
   <!-- Navbar is inserted here by script.js -->
   <div id="site-header"></div>
 
-  <!-- ============ HERO (full-screen background video + centered text) ============ -->
-  <header class="hero">
-    <!-- Put your own looping clip at public/assets/hero.mp4. If missing, the gradient shows instead. -->
-    <video class="hero-video" autoplay muted loop playsinline>
-      <source src="assets/hero.mp4" type="video/mp4" />
-    </video>
+  <!-- ============ HERO — 3D particle sphere behind the title ============ -->
+  <header class="hero hm-hero">
+    <div class="hm-hero-canvas" id="heroCanvas" aria-hidden="true"></div>
     <div class="hero-overlay"></div>
 
     <div class="hero-content">
@@ -33,6 +35,11 @@
       <p class="hero-sub">Browse works by this year's finalists and prize winners</p>
       <a href="/exhibition" class="btn btn-light">View Exhibition</a>
     </div>
+
+    <a class="hm-scroll" href="#about" aria-label="Scroll down">
+      <span>Scroll</span>
+      <i></i>
+    </a>
   </header>
 
   <!-- ============ ABOUT ============ -->
@@ -56,6 +63,59 @@
     </div>
   </section>
 
+  <!-- ============ NUMBERS (live from your data) ============ -->
+  <section class="hm-stats">
+    <div class="hm-stats-inner">
+      <div class="hm-stat reveal"><b data-count="years">0</b><span>Years running</span></div>
+      <div class="hm-stat reveal"><b data-count="exhibitions">0</b><span>Exhibitions</span></div>
+      <div class="hm-stat reveal"><b data-count="artworks">0</b><span>Artworks shown</span></div>
+      <div class="hm-stat reveal"><b data-count="creators">0</b><span>Creators</span></div>
+    </div>
+  </section>
+
+  <!-- ============ FEATURED WORKS (latest year, award winners first) ============ -->
+  <section class="hm-featured" id="featured" hidden>
+    <div class="hm-head reveal">
+      <div>
+        <p class="hm-eyebrow" id="featuredEyebrow">Featured</p>
+        <h2 id="featuredTitle">Award winners</h2>
+      </div>
+      <a class="hm-link" id="featuredLink" href="/exhibition">View the full exhibition &rarr;</a>
+    </div>
+    <div class="hm-works" id="featuredWorks"></div>
+  </section>
+
+  <!-- ============ 3D ARTWORK RING ============ -->
+  <section class="hm-ring">
+    <div class="hm-ring-head reveal">
+      <p class="hm-eyebrow">Interactive</p>
+      <h2>Step inside the exhibition</h2>
+      <p>Drag to turn the gallery. Click any work to open its exhibition.</p>
+    </div>
+    <div class="hm-ring-canvas" id="ringCanvas"></div>
+    <div class="hm-ring-caption" id="ringCaption" aria-live="polite">
+      <span class="hm-ring-award" data-award></span>
+      <strong data-title></strong>
+      <span data-meta></span>
+    </div>
+    <div class="hm-ring-hint"><i></i> Drag to explore</div>
+  </section>
+
+  <!-- ============ OPEN CALL ============ -->
+  <section class="hm-call">
+    <div class="hm-call-inner reveal">
+      <div>
+        <p class="hm-eyebrow">Open call</p>
+        <h2>Your research could be the next artwork.</h2>
+        <p>Microscope images, simulations, data visualisations, field photographs — if it sits between science and art, we want to see it.</p>
+      </div>
+      <div class="hm-call-actions">
+        <a class="btn btn-solid" href="/contact#submit">Submit your work</a>
+        <a class="btn btn-accent" href="/faq">Read the FAQ</a>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ QUOTE BAND ============ -->
   <section class="quote parallax">
     <div class="quote-overlay"></div>
@@ -72,18 +132,8 @@
   <!-- Footer is inserted here by script.js -->
   <div id="site-footer"></div>
   <script src="script.js"></script>
-  <script>
-    // Homepage quote band ← first featured press quote
-    fetch("/api/media")
-      .then((r) => r.json())
-      .then((list) => {
-        const q = list.find((m) => m.featured && m.quote);
-        if (!q) return;
-        document.getElementById("homeQuote").textContent = `“${q.quote}”`;
-        document.getElementById("homeQuoteOutlet").textContent = `–${q.outlet}`;
-      })
-      .catch(() => {});
-  </script>
+  <script src="home.js"></script>
+  <script type="module" src="home-3d.js"></script>
   <script src="/cursor.js"></script>
 </body>
 </html>

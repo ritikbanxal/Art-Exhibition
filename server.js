@@ -10,6 +10,7 @@
 // a timestamped backup in /data/backups (last 30 per file).
 // =========================================================
 const express = require("express");
+const compression = require("compression");
 const multer = require("multer");
 const crypto = require("crypto");
 const fs = require("fs");
@@ -77,6 +78,7 @@ app.disable("x-powered-by");
 // Hosts like Hostinger sit behind a proxy: trust it so HTTPS cookies and
 // the login rate-limit see the real visitor
 app.set("trust proxy", 1);
+app.use(compression()); // gzip text files (three.js goes from ~2 MB to ~450 KB)
 app.use(express.json({ limit: "2mb" }));
 
 // =========================================================
@@ -365,6 +367,12 @@ app.post("/api/admin/upload", requireAdmin, (req, res) => {
 // Pages
 // =========================================================
 app.get("/admin", (req, res) => res.sendFile(path.join(__dirname, "public", "admin", "index.html")));
+// three.js for the homepage 3D scenes, served from node_modules (no outside CDN)
+const THREE_DIR = path.join(__dirname, "node_modules", "three", "build");
+app.get("/vendor/three/:file(three\\.module\\.js|three\\.core\\.js)", (req, res) => {
+  res.set("Cache-Control", "public, max-age=604800");
+  res.type("application/javascript").sendFile(path.join(THREE_DIR, req.params.file));
+});
 // Uploaded images (from storage when STORAGE_DIR is set)
 app.use("/uploads", express.static(UPLOAD_DIR, { maxAge: "7d" }));
 app.use(express.static(path.join(__dirname, "public"), { extensions: ["html"] }));

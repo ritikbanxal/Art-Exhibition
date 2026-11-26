@@ -12,7 +12,9 @@
     "node": ">=20.12"
   },
   "dependencies": {
+    "compression": "^1.8.2",
     "express": "^4.21.2",
-    "multer": "^2.5.0"
+    "multer": "^2.5.0",
+    "three": "^0.187.0"
   }
 }
