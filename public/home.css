@@ -16,6 +16,19 @@
   background: radial-gradient(ellipse at center, rgba(5,5,7,.55) 0%, rgba(5,5,7,.15) 55%, rgba(5,5,7,.35) 100%);
 }
 .hm-hero .hero-content { text-shadow: 0 2px 30px rgba(0,0,0,.5); }
+.hm-hero { min-height: 700px; }
+.hm-hero-content { padding: 110px 20px 100px; }
+.hm-hero .hero-sub { margin-bottom: 26px; }
+.hm-hero-text { max-width: 680px; margin: 0 auto; }
+.hm-hero-text p {
+  font-size: 16.5px; font-weight: 300; line-height: 1.75;
+  letter-spacing: .3px;
+  color: rgba(255,255,255,.82);
+}
+.hm-hero-text p + p { margin-top: 10px; }
+.hm-hero-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
+.hm-hero-actions .btn { min-width: 220px; text-align: center; }
+.hm-hero .btn-solid:hover { background: #fff; border-color: #fff; color: #111; }
 
 .hm-scroll {
   position: absolute; left: 50%; bottom: 28px; z-index: 2;
@@ -64,7 +77,9 @@
   border-left: 2px solid var(--accent);
   margin-bottom: 22px;
 }
-.hm-about-body { font-size: 17px; line-height: 1.85; color: #707070; margin-bottom: 34px; }
+.hm-about-body { margin-bottom: 34px; }
+.hm-about-body p { font-size: 17px; line-height: 1.85; color: #707070; }
+.hm-about-body p + p { margin-top: 14px; }
 .hm-about-body:empty { display: none; }
 
 /* Collage: one large image + a smaller one overlapping, and a rotating badge */
@@ -192,7 +207,14 @@ html.no-webgl .hm-ring { display: none; }
   display: grid; grid-template-columns: 1.4fr 1fr; gap: 60px; align-items: center;
 }
 .hm-call h2 { font-size: 40px; font-weight: 200; letter-spacing: 1px; line-height: 1.2; color: #151515; margin-bottom: 16px; }
-.hm-call p:not(.hm-eyebrow) { color: #666; font-size: 18px; line-height: 1.75; max-width: 560px; }
+.hm-call-text p { color: #666; font-size: 18px; line-height: 1.75; max-width: 620px; }
+.hm-call-text p + p { margin-top: 14px; }
+.hm-motto {
+  margin-top: 28px;
+  font-size: 14px; font-weight: 400;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: var(--accent);
+}
 .hm-call-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
 .hm-call-actions .btn { min-width: 240px; text-align: center; padding: 14px 28px; }
 .hm-call .btn-solid:hover { background: #111; border-color: #111; color: #fff; }
@@ -223,6 +245,15 @@ html.no-webgl .hm-ring { display: none; }
   .hm-call { padding: 70px 20px; }
   .hm-call-inner { grid-template-columns: 1fr; gap: 30px; }
   .hm-call h2 { font-size: 28px; }
-  .hm-call p:not(.hm-eyebrow) { font-size: 16px; }
+  .hm-call-text p { font-size: 16px; }
+  .hm-motto { font-size: 12px; letter-spacing: 2px; }
+  .hm-hero { min-height: 640px; }
+  .hm-hero-content { padding: 100px 4px 90px; }
+  .hm-hero-text p { font-size: 14.5px; line-height: 1.65; }
+  .hm-hero-text p + p { display: none; }  /* keep the hero short on phones */
+  .hm-hero-actions { flex-direction: column; align-items: stretch; gap: 10px; margin-top: 26px; padding: 0 12px; }
+  .hm-hero-actions .btn { min-width: 0; }
+  .hm-scroll { display: none; }
+  .hm-about-body p { font-size: 16px; }
   .hm-call-actions .btn { width: 100%; min-width: 0; }
 }

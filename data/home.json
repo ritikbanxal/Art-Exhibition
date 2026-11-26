@@ -1,0 +1,40 @@
+{
+  "hero": {
+    "kicker": "Discovering the extraordinary within the living world",
+    "title": "The Living Canvas",
+    "subtitle": "Exploring Life Through Science and Art",
+    "text": [
+      "An interdisciplinary exhibition and competition celebrating the intersection of life sciences, visual arts and human curiosity.",
+      "From the intricate architecture of a single cell to the extraordinary complexity of the human brain, The Living Canvas reveals the beauty of life through the eyes of scientists, researchers and artists."
+    ],
+    "primaryLabel": "Explore the Exhibition",
+    "primaryLink": "/exhibition",
+    "secondaryLabel": "Submit Your Work",
+    "secondaryLink": "/contact#submit"
+  },
+  "intro": {
+    "eyebrow": "About The Living Canvas",
+    "headline": "Where Scientific Discovery Becomes Art",
+    "lead": "Science allows us to understand life. Art allows us to experience it differently.",
+    "paragraphs": [
+      "The Living Canvas brings these two disciplines together through a curated collection of scientific photography, microscopic imagery, research videos, illustrations and visual interpretations of the living world.",
+      "By presenting scientific discoveries through an artistic lens, we invite audiences to explore the extraordinary patterns, structures and processes that shape life — many of which remain invisible to the naked eye.",
+      "The Living Canvas is a space for discovery, creativity and dialogue between scientists, artists, students and the wider community."
+    ],
+    "linkLabel": "Discover more",
+    "linkUrl": "/about"
+  },
+  "closing": {
+    "headline": "Every Discovery Has a Story",
+    "paragraphs": [
+      "Behind every scientific image is a question, an experiment and a moment of discovery.",
+      "Explore the stories behind our collection, meet the researchers who created these works, and discover how science continues to transform our understanding of life.",
+      "Whether you are a scientist, artist, student or simply curious about the world around you, we invite you to see life from a different perspective."
+    ],
+    "motto": "Explore. Discover. Create. Contribute.",
+    "primaryLabel": "Explore the Exhibition",
+    "primaryLink": "/exhibition",
+    "secondaryLabel": "Submit Your Work",
+    "secondaryLink": "/contact#submit"
+  }
+}

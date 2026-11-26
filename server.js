@@ -1,5 +1,5 @@
 // =========================================================
-// Art of Rikk — website + admin panel server
+// The Living Canvas — website + admin panel server
 //
 //   Public site ........ /            (files in /public)
 //   Public data API .... /api/...     (read-only)
@@ -92,6 +92,7 @@ const DOCS = {
   faq: "array",
   about: "object",
   site: "object",
+  home: "object",
 };
 
 function readData(name, fallback) {
@@ -173,6 +174,7 @@ app.get("/api/exhibitions/:year", (req, res) => {
 
 app.get("/api/faq", (req, res) => res.json(readData("faq", [])));
 app.get("/api/about", (req, res) => res.json(readData("about", {})));
+app.get("/api/home", (req, res) => res.json(readData("home", {})));
 
 app.get("/api/media", (req, res) => {
   const list = readData("media", []);
@@ -324,6 +326,10 @@ function validate(name, body) {
     if (years.some((y) => !y)) return "Every exhibition needs a year.";
     if (new Set(years).size !== years.length) return "Two exhibitions have the same year.";
     for (const e of body) if (badUrl(e.cover) || badUrl(e.venue?.mapUrl)) return `${e.year} has an invalid link.`;
+  }
+  if (name === "home") {
+    const links = [body.hero?.primaryLink, body.hero?.secondaryLink, body.intro?.linkUrl, body.closing?.primaryLink, body.closing?.secondaryLink];
+    if (links.some(badUrl)) return "A homepage button has an invalid link.";
   }
   if (name === "site") {
     for (const k of ["instagram", "youtube", "submissionForm"]) if (badUrl(body[k])) return `Invalid link for ${k}.`;

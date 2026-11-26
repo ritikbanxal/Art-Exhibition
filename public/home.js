@@ -1,5 +1,6 @@
 // =========================================================
-// Homepage data: About section, numbers strip, press quote.
+// Homepage data: hero, introduction and closing text (Admin → Homepage),
+// numbers strip, collage images and press quote.
 // (The 3D scenes live in home-3d.js.)
 // =========================================================
 (() => {
@@ -10,14 +11,46 @@
     return m ? `https://img.youtube.com/vi/${m[1]}/hqdefault.jpg` : "";
   };
 
-  // ---------- About section + numbers strip ----------
+  // Helpers: set text / fill paragraphs / set a button — only when there's content
+  const setText = (id, value) => { if (value) $(id).textContent = value; };
+  const setParas = (id, list) => {
+    const paras = (list || []).filter(Boolean);
+    if (!paras.length) return;
+    $(id).replaceChildren(...paras.map((t) => Object.assign(document.createElement("p"), { textContent: t })));
+  };
+  const setButton = (id, label, link) => {
+    const el = $(id);
+    if (!label) { el.hidden = true; return; }
+    el.textContent = label;
+    if (link) el.href = link;
+  };
+
+  // ---------- Homepage text (Admin → Homepage) ----------
+  json("/api/home", {}).then((home) => {
+    const h = home.hero || {}, i = home.intro || {}, c = home.closing || {};
+    setText("heroKicker", h.kicker);
+    setText("heroTitle", h.title);
+    setText("heroSub", h.subtitle);
+    setParas("heroText", h.text);
+    setButton("heroBtn1", h.primaryLabel, h.primaryLink);
+    setButton("heroBtn2", h.secondaryLabel, h.secondaryLink);
+
+    setText("introEyebrow", i.eyebrow);
+    setText("aboutHeadline", i.headline);
+    setText("aboutLead", i.lead);
+    setParas("aboutBody", i.paragraphs);
+    if (i.linkLabel) $("introLink").textContent = `${i.linkLabel} →`;
+    if (i.linkUrl) $("introLink").href = i.linkUrl;
+
+    setText("closingHeadline", c.headline);
+    setParas("closingText", c.paragraphs);
+    setText("closingMotto", c.motto);
+    setButton("closingBtn1", c.primaryLabel, c.primaryLink);
+    setButton("closingBtn2", c.secondaryLabel, c.secondaryLink);
+  });
+
+  // ---------- Numbers strip + years badge ----------
   Promise.all([json("/api/stats", {}), json("/api/about", {})]).then(([stats, about]) => {
-    // About text comes from Admin → About Page (mission)
-    const m = about.mission || {};
-    const paras = (m.paragraphs || []).filter(Boolean);
-    if (m.headline) $("aboutHeadline").textContent = m.headline;
-    if (paras[0]) $("aboutLead").textContent = paras[0];
-    $("aboutBody").textContent = paras[1] || "";
     if (about.founded) $("aboutYears").textContent = `${new Date().getFullYear() - about.founded}+`;
 
     const values = {

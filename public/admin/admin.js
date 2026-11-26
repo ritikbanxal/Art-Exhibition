@@ -564,6 +564,54 @@ const ABOUT_SECTIONS = [
   },
 ];
 
+const HOME_SECTIONS = [
+  {
+    title: "Hero (top of the homepage)", sub: "The text over the 3D particle animation.",
+    fields: [{
+      key: "hero", type: "group", label: "",
+      fields: [
+        { key: "kicker", label: "Small line above the title" },
+        { key: "title", label: "Title", half: true },
+        { key: "subtitle", label: "Subtitle", half: true },
+        { key: "text", label: "Intro text", type: "paragraphs", help: "Keep it short — 1 or 2 paragraphs. Blank line = new paragraph." },
+        { key: "primaryLabel", label: "Main button text", half: true },
+        { key: "primaryLink", label: "Main button link", half: true, placeholder: "/exhibition" },
+        { key: "secondaryLabel", label: "Second button text", half: true },
+        { key: "secondaryLink", label: "Second button link", half: true, placeholder: "/contact#submit" },
+      ],
+    }],
+  },
+  {
+    title: "Introduction", sub: "The section below the hero, next to the artwork collage.",
+    fields: [{
+      key: "intro", type: "group", label: "",
+      fields: [
+        { key: "eyebrow", label: "Small heading", half: true },
+        { key: "headline", label: "Headline" },
+        { key: "lead", label: "Highlighted first line", type: "textarea" },
+        { key: "paragraphs", label: "Text", type: "paragraphs", tall: true, help: "Blank line = new paragraph." },
+        { key: "linkLabel", label: "Link text", half: true },
+        { key: "linkUrl", label: "Link", half: true, placeholder: "/about" },
+      ],
+    }],
+  },
+  {
+    title: "Closing section", sub: "The last section before the footer.",
+    fields: [{
+      key: "closing", type: "group", label: "",
+      fields: [
+        { key: "headline", label: "Headline" },
+        { key: "paragraphs", label: "Text", type: "paragraphs", tall: true, help: "Blank line = new paragraph." },
+        { key: "motto", label: "Motto line", placeholder: "Explore. Discover. Create. Contribute." },
+        { key: "primaryLabel", label: "Main button text", half: true },
+        { key: "primaryLink", label: "Main button link", half: true },
+        { key: "secondaryLabel", label: "Second button text", half: true },
+        { key: "secondaryLink", label: "Second button link", half: true },
+      ],
+    }],
+  },
+];
+
 const SITE_SECTIONS = [
   {
     title: "General",
@@ -935,6 +983,8 @@ const showFaq = () =>
     fromDoc: (d) => d.categories,
   });
 
+const showHome = () => showDocument({ name: "home", title: "Homepage", sub: "Hero, introduction and closing text on the homepage", sections: HOME_SECTIONS });
+
 const showAbout = () => showDocument({ name: "about", title: "About Page", sub: "Everything on the About page", sections: ABOUT_SECTIONS });
 
 const showSite = () =>
@@ -952,6 +1002,7 @@ const SECTIONS = {
   artworks: showArtworks,
   exhibitions: showExhibitions,
   media: showMedia,
+  home: showHome,
   faq: showFaq,
   about: showAbout,
   site: showSite,

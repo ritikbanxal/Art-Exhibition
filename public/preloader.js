@@ -68,7 +68,7 @@
   const $ = (s) => pl.querySelector(s);
 
   // Letters of the site name (site-config.js is loaded in <head>)
-  const name = (window.SITE && window.SITE.name) || "Art of Rikk";
+  const name = (window.SITE && window.SITE.name) || "The Living Canvas";
   $(".pl-name").innerHTML = [...name]
     .map((ch, i) => (ch === " " ? `<span class="sp" style="--i:${i}"></span>` : `<span style="--i:${i}">${ch.replace(/[<>&]/g, "")}</span>`))
     .join("");

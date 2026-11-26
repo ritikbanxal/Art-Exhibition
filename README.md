@@ -1,4 +1,4 @@
-# Art of Rikk — Exhibition Website
+# The Living Canvas — Exhibition Website
 
 Made by Rikk.
 

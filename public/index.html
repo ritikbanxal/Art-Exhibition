@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Art of Rikk – Exhibition</title>
+  <title>The Living Canvas – Exhibition</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@100;200;300;400;500&display=swap" rel="stylesheet" />
@@ -29,11 +29,18 @@
     <div class="hm-hero-canvas" id="heroCanvas" aria-hidden="true"></div>
     <div class="hero-overlay"></div>
 
-    <div class="hero-content">
-      <p class="hero-kicker">A [Your Organization] Exhibition</p>
-      <h1 data-site-name>Art of Rikk</h1>
-      <p class="hero-sub">Browse works by this year's finalists and prize winners</p>
-      <a href="/exhibition" class="btn btn-light">View Exhibition</a>
+    <!-- Text comes from Admin → Homepage (data/home.json); these are fallbacks -->
+    <div class="hero-content hm-hero-content">
+      <p class="hero-kicker" id="heroKicker">Discovering the extraordinary within the living world</p>
+      <h1 id="heroTitle">The Living Canvas</h1>
+      <p class="hero-sub" id="heroSub">Exploring Life Through Science and Art</p>
+      <div class="hm-hero-text" id="heroText">
+        <p>An interdisciplinary exhibition and competition celebrating the intersection of life sciences, visual arts and human curiosity.</p>
+      </div>
+      <div class="hm-hero-actions">
+        <a href="/exhibition" class="btn btn-light" id="heroBtn1">Explore the Exhibition</a>
+        <a href="/contact#submit" class="btn btn-solid" id="heroBtn2">Submit Your Work</a>
+      </div>
     </div>
 
     <a class="hm-scroll" href="#about" aria-label="Scroll down">
@@ -42,19 +49,15 @@
     </a>
   </header>
 
-  <!-- ============ ABOUT — text from Admin → About Page (mission + cards) ============ -->
+  <!-- ============ INTRODUCTION — text from Admin → Homepage ============ -->
   <section class="hm-about" id="about">
     <div class="hm-about-grid">
       <div class="hm-about-text reveal">
-        <p class="hm-eyebrow">About <span data-site-name>Art of Rikk</span></p>
-        <h2 id="aboutHeadline">Where scientific discovery meets artistic vision.</h2>
-        <p class="hm-about-lead" id="aboutLead">
-          This exhibition explores the meeting point of science and art. Works
-          are chosen for their beauty, their scientific interest, and their
-          power to spark curiosity.
-        </p>
-        <p class="hm-about-body" id="aboutBody"></p>
-        <a class="hm-link" href="/about">Discover more &rarr;</a>
+        <p class="hm-eyebrow" id="introEyebrow">About The Living Canvas</p>
+        <h2 id="aboutHeadline">Where Scientific Discovery Becomes Art</h2>
+        <p class="hm-about-lead" id="aboutLead">Science allows us to understand life. Art allows us to experience it differently.</p>
+        <div class="hm-about-body" id="aboutBody"></div>
+        <a class="hm-link" href="/about" id="introLink">Discover more &rarr;</a>
       </div>
 
       <div class="hm-about-visual reveal" aria-hidden="true">
@@ -63,7 +66,7 @@
         <div class="hm-ab-badge">
           <svg viewBox="0 0 120 120">
             <defs><path id="badgeCircle" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0" /></defs>
-            <text><textPath href="#badgeCircle" textLength="286" lengthAdjust="spacing">ART · SCIENCE · EXHIBITION · ART · SCIENCE · EXHIBITION · </textPath></text>
+            <text><textPath href="#badgeCircle" textLength="286" lengthAdjust="spacing">LIFE · SCIENCE · ART · LIFE · SCIENCE · ART · </textPath></text>
           </svg>
           <span><b id="aboutYears">20+</b><small>Years</small></span>
         </div>
@@ -98,21 +101,6 @@
     <div class="hm-ring-hint"><i></i> Drag to explore</div>
   </section>
 
-  <!-- ============ OPEN CALL ============ -->
-  <section class="hm-call">
-    <div class="hm-call-inner reveal">
-      <div>
-        <p class="hm-eyebrow">Open call</p>
-        <h2>Your research could be the next artwork.</h2>
-        <p>Microscope images, simulations, data visualisations, field photographs — if it sits between science and art, we want to see it.</p>
-      </div>
-      <div class="hm-call-actions">
-        <a class="btn btn-solid" href="/contact#submit">Submit your work</a>
-        <a class="btn btn-accent" href="/faq">Read the FAQ</a>
-      </div>
-    </div>
-  </section>
-
   <!-- ============ QUOTE BAND ============ -->
   <section class="quote parallax">
     <div class="quote-overlay"></div>
@@ -123,6 +111,23 @@
         <cite id="homeQuoteOutlet">–Publication Name</cite>
       </blockquote>
       <a href="/media" class="btn btn-light">Read Media Coverage</a>
+    </div>
+  </section>
+
+  <!-- ============ CLOSING — text from Admin → Homepage ============ -->
+  <section class="hm-call">
+    <div class="hm-call-inner reveal">
+      <div>
+        <h2 id="closingHeadline">Every Discovery Has a Story</h2>
+        <div class="hm-call-text" id="closingText">
+          <p>Behind every scientific image is a question, an experiment and a moment of discovery.</p>
+        </div>
+        <p class="hm-motto" id="closingMotto">Explore. Discover. Create. Contribute.</p>
+      </div>
+      <div class="hm-call-actions">
+        <a class="btn btn-solid" href="/exhibition" id="closingBtn1">Explore the Exhibition</a>
+        <a class="btn btn-accent" href="/contact#submit" id="closingBtn2">Submit Your Work</a>
+      </div>
     </div>
   </section>
 

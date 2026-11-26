@@ -6,7 +6,7 @@
 // =========================================================
 window.SITE = Object.assign(
   {
-    name: "Art of Rikk",
+    name: "The Living Canvas",
     tagline: "",
     email: "",
     location: "",
@@ -128,7 +128,7 @@ fill("[data-submit-link]", (el) => {
   }
 });
 if (!RAW.submissionForm) fill("[data-submit-note]", (el) => (el.textContent = `Questions? Email ${RAW.email}`));
-document.title = document.title.replace(/Art of Rikk/g, RAW.name);
+document.title = document.title.replace(/The Living Canvas/g, RAW.name);
 
 // ---------- Menu: newest year on its own, archive dropdown for the rest ----------
 //   2025 Exhibition  |  Exhibition Archive ▾  → 2024 Exhibition
