@@ -24,7 +24,7 @@
   html.classList.add("has-cursor");
 
   // What counts as clickable / an artwork / a typing area
-  const VIEW = ".tile, .ar-card, .md-quote[href], .hm-work";
+  const VIEW = ".tile, .ar-card, .md-quote[href]";
   const HOVER = "a[href], button:not(:disabled), [role='button'], label, select, summary, .md-chip, .ex-chip, .faq-q, .row";
   const TEXT = "input, textarea, select, [contenteditable='true'], iframe";
 
