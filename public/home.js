@@ -12,8 +12,23 @@
     return m ? `https://img.youtube.com/vi/${m[1]}/hqdefault.jpg` : "";
   };
 
-  // ---------- Numbers strip (counts up when it scrolls into view) ----------
+  // ---------- About section + numbers strip ----------
   Promise.all([json("/api/stats", {}), json("/api/about", {})]).then(([stats, about]) => {
+    // About text comes from Admin → About Page (mission + "What we look for")
+    const m = about.mission || {};
+    const paras = (m.paragraphs || []).filter(Boolean);
+    if (m.headline) $("aboutHeadline").textContent = m.headline;
+    if (paras[0]) $("aboutLead").textContent = paras[0];
+    $("aboutBody").textContent = paras[1] || "";
+    const pillars = (about.pillars || []).slice(0, 3);
+    if (pillars.length) {
+      $("aboutPillars").innerHTML = pillars
+        .map((p, i) => `<li class="reveal" style="transition-delay:${i * 0.1}s"><span>0${i + 1}</span><h3>${esc(p.title)}</h3><p>${esc(p.text)}</p></li>`)
+        .join("");
+      window.revealAll?.();
+    }
+    if (about.founded) $("aboutYears").textContent = `${new Date().getFullYear() - about.founded}+`;
+
     const values = {
       years: about.founded ? new Date().getFullYear() - about.founded : 0,
       exhibitions: stats.exhibitions || 0,
@@ -42,8 +57,41 @@
     document.querySelectorAll("[data-count]").forEach((el) => io.observe(el));
   });
 
+  // ---------- About collage: two artworks (different from the featured ones) ----------
+  const coverOf = (a) => a.image || (a.type === "video" ? ytThumb(a.videoUrl) : "");
+  function fillAboutImages(list) {
+    const covers = list.map(coverOf).filter(Boolean);
+    const intro = ((window.SITE && window.SITE.introImages) || []).map((x) => x && x.image).filter(Boolean);
+    // Prefer artworks from older years (the featured row shows the newest year)
+    const newest = Math.max(...list.map((a) => Number(a.year) || 0));
+    const older = list.filter((a) => Number(a.year) !== newest).map(coverOf).filter(Boolean);
+    const pool = [...older, ...covers, ...intro];
+    const [a, b] = [...new Set(pool)];
+    if (a) $("aboutImgA").src = a;
+    if (b) $("aboutImgB").src = b;
+    else $("aboutSmall").hidden = true;
+  }
+
+  // Small collage image drifts slightly as you scroll (subtle depth)
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const small = $("aboutSmall");
+    const section = $("about");
+    let ticking = false;
+    addEventListener("scroll", () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const r = section.getBoundingClientRect();
+        const p = (innerHeight - r.top) / (innerHeight + r.height); // 0 → 1 while passing
+        if (p > -0.2 && p < 1.2) small.style.transform = `translateY(${(0.5 - p) * 70}px)`;
+        ticking = false;
+      });
+    }, { passive: true });
+  }
+
   // ---------- Featured works: newest year, award winners first ----------
   json("/api/artworks", []).then((list) => {
+    fillAboutImages(list);
     if (!list.length) return;
     const year = Math.max(...list.map((a) => Number(a.year) || 0));
     const pick = list

@@ -42,25 +42,39 @@
     </a>
   </header>
 
-  <!-- ============ ABOUT ============ -->
-  <section class="about parallax" id="about">
-    <div class="about-inner">
-      <h2>About <span data-site-name>Art of Rikk</span></h2>
-      <p>
-        Replace this paragraph with your own introduction. Explain what the
-        exhibition is, how works are selected, and why the meeting point of
-        art and science matters to your community.
-      </p>
-      <p>
-        A second paragraph can describe the tools and techniques behind the
-        works — microscopes, simulations, sensors — and how images made for
-        research can become something people stop and look at as art.
-      </p>
-      <p>
-        Close with a one-line statement of purpose for the exhibition.
-      </p>
-      <a href="/about" class="btn btn-accent">Discover More</a>
+  <!-- ============ ABOUT — text from Admin → About Page (mission + cards) ============ -->
+  <section class="hm-about" id="about">
+    <div class="hm-about-grid">
+      <div class="hm-about-text reveal">
+        <p class="hm-eyebrow">About <span data-site-name>Art of Rikk</span></p>
+        <h2 id="aboutHeadline">Where scientific discovery meets artistic vision.</h2>
+        <p class="hm-about-lead" id="aboutLead">
+          This exhibition explores the meeting point of science and art. Works
+          are chosen for their beauty, their scientific interest, and their
+          power to spark curiosity.
+        </p>
+        <p class="hm-about-body" id="aboutBody"></p>
+        <a class="hm-link" href="/about">Discover more &rarr;</a>
+      </div>
+
+      <div class="hm-about-visual reveal" aria-hidden="true">
+        <figure class="hm-ab-img hm-ab-main"><img id="aboutImgA" alt="" /></figure>
+        <figure class="hm-ab-img hm-ab-small" id="aboutSmall"><img id="aboutImgB" alt="" /></figure>
+        <div class="hm-ab-badge">
+          <svg viewBox="0 0 120 120">
+            <defs><path id="badgeCircle" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0" /></defs>
+            <text><textPath href="#badgeCircle" textLength="286" lengthAdjust="spacing">ART · SCIENCE · EXHIBITION · ART · SCIENCE · EXHIBITION · </textPath></text>
+          </svg>
+          <span><b id="aboutYears">20+</b><small>Years</small></span>
+        </div>
+      </div>
     </div>
+
+    <ol class="hm-pillars" id="aboutPillars">
+      <li class="reveal"><span>01</span><h3>Aesthetic excellence</h3><p>Striking compositions that hold your attention on their own.</p></li>
+      <li class="reveal"><span>02</span><h3>Scientific interest</h3><p>Works rooted in real research, observation or data.</p></li>
+      <li class="reveal"><span>03</span><h3>Inspiring creativity</h3><p>Pieces that open new conversations across disciplines.</p></li>
+    </ol>
   </section>
 
   <!-- ============ NUMBERS (live from your data) ============ -->
