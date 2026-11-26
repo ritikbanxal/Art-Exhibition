@@ -211,9 +211,17 @@ async function initRing() {
   const caption = document.getElementById("ringCaption");
 
   let list = [];
-  try { list = await fetch("/api/artworks").then((r) => r.json()); } catch {}
+  let labels = {};
+  try {
+    const [arts, exs] = await Promise.all([
+      fetch("/api/artworks").then((r) => r.json()),
+      fetch("/api/exhibitions").then((r) => r.json()).catch(() => []),
+    ]);
+    list = arts;
+    labels = Object.fromEntries(exs.map((e) => [e.year, e.label || String(e.year)])); // 2025 → "2025–2026"
+  } catch {}
   const works = list
-    .map((a) => ({ ...a, cover: a.image || (a.type === "video" ? ytThumb(a.videoUrl) : "") }))
+    .map((a) => ({ ...a, cover: a.image || (a.type === "video" ? ytThumb(a.videoUrl) : ""), season: labels[a.year] || a.year }))
     .filter((a) => a.cover)
     .sort((a, b) => b.year - a.year || (b.award ? 1 : 0) - (a.award ? 1 : 0))
     .slice(0, 14);
@@ -349,7 +357,7 @@ async function initRing() {
     caption.classList.remove("show");
     setTimeout(() => {
       caption.querySelector("[data-title]").textContent = art.title;
-      caption.querySelector("[data-meta]").textContent = [art.artists, art.year].filter(Boolean).join(" · ");
+      caption.querySelector("[data-meta]").textContent = [art.artists, art.season].filter(Boolean).join(" · ");
       caption.querySelector("[data-award]").textContent = art.award || "";
       caption.classList.add("show");
     }, 180);

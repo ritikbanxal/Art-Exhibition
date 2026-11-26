@@ -38,22 +38,33 @@ function coverOf(a) {
   return m ? `https://img.youtube.com/vi/${m[1]}/hqdefault.jpg` : "";
 }
 
+const isFileVideo = (url = "") => /\.(mp4|webm|mov|m4v)(\?|$)/i.test(url);
+
 function tileHTML(a, i) {
+  const sub = a.artists || a.name || "";
   return `
     <button class="tile" data-index="${i}" aria-label="${esc(a.title)}${a.award ? " – " + esc(a.award) : ""}">
       <img src="${esc(coverOf(a))}" alt="${esc(a.title)}" loading="lazy" />
       ${a.award ? `<span class="tile-ribbon" title="${esc(a.award)}">${ribbonIcon}</span>` : ""}
       ${a.type === "video" ? '<span class="tile-play">&#9654;</span>' : ""}
+      ${a.number && collectionsMode ? `<span class="tile-num">${pad(a.number)}</span>` : ""}
       <span class="tile-cover">
         ${a.award ? `<span class="tile-award">${esc(a.award)}</span>` : ""}
         <span class="tile-title">${esc(a.title)}</span>
-        <span class="tile-artists">${esc(a.artists)}</span>
+        ${sub && sub !== a.title ? `<span class="tile-artists">${esc(sub)}</span>` : ""}
       </span>
     </button>`;
 }
 
+let collectionsMode = false;
+let collections = [];
+let label = "";
+
 async function load() {
-  const years = await fetch("/api/years").then((r) => r.json());
+  // Every exhibition year with its display label (e.g. 2025 → "2025–2026")
+  const all = await fetch("/api/exhibitions").then((r) => r.json()).catch(() => []);
+  const years = all.map((e) => e.year);
+  const labelOf = (y) => (all.find((e) => e.year === y) || {}).label || String(y);
   const year = Number(new URLSearchParams(location.search).get("year")) || years[0] || new Date().getFullYear();
 
   const [info, list] = await Promise.all([
@@ -61,30 +72,37 @@ async function load() {
     fetch(`/api/artworks?year=${year}`).then((r) => r.json()),
   ]);
   allWorks = list;
+  label = info.label || labelOf(year);
+  collections = (info.collections || []).filter((c) => c.title);
+  collectionsMode = collections.length > 0;
 
-  // ---- Banner ----
-  $("pageTitle").textContent = `${year} Exhibition`;
-  document.title = `${year} Exhibition – ${window.SITE?.name || ""}`;
-  $("pageSub").textContent = info.subtitle || "";
+  // ---- Hero: kicker, title and the exhibition's own intro text ----
+  const title = info.title || `${label} Exhibition`;
+  $("pageTitle").textContent = title;
+  $("pageSub").textContent = info.title ? `${label} Exhibition` : window.SITE?.name || "";
+  document.title = `${title} – ${window.SITE?.name || ""}`;
 
-  // Cover image: the year's "cover", else the first artwork
-  const cover = info.cover || list.map(coverOf).find(Boolean);
-  if (cover) {
-    const css = `url("${cover.replace(/"/g, "%22")}")`;
-    $("exBanner").style.setProperty("--ex-cover", css);
-    $("introBand").style.setProperty("--ex-cover", css);
-  }
+  const intro = (info.intro || []).filter(Boolean);
+  $("introCount").textContent = intro[0] || info.subtitle || "";
+  $("introCount").hidden = !$("introCount").textContent;
+  $("introParas").innerHTML = intro.slice(1).map((p) => `<p>${esc(p)}</p>`).join("");
 
-  // ---- Intro + visit card ----
-  const stills = list.filter((a) => a.type !== "video");
-  const videos = list.filter((a) => a.type === "video");
-  const creators = countCreators(list);
-  $("introEyebrow").textContent = `The ${year} exhibition`;
-  $("introCount").innerHTML =
-    `The ${year} exhibition features <strong>${plural(stills.length, "still image")}</strong>` +
-    (videos.length ? ` and <strong>${plural(videos.length, "video")} and animations</strong>` : "") +
-    (creators ? ` from <strong>${plural(creators, "creator")}</strong>.` : ".");
-  $("introParas").innerHTML = (info.intro || []).map((p) => `<p>${esc(p)}</p>`).join("");
+  // Key facts (counted from the works themselves)
+  const videos = list.filter((a) => a.type === "video").length;
+  const stills = list.length - videos;
+  const facts = [
+    collectionsMode && [pad(collections.length), "Collections"],
+    [pad(list.length), "Works"],
+    videos && [pad(videos), videos === 1 ? "Video" : "Videos & animations"],
+  ].filter(Boolean);
+  if (facts.length < 2 && stills) facts.push([pad(stills), stills === 1 ? "Still image" : "Still images"]);
+  $("heroFacts").innerHTML = facts.map(([n, t]) => `<div><dt>${esc(n)}</dt><dd>${esc(t)}</dd></div>`).join("");
+
+  // Collection index → jumps to each collection
+  $("collIndex").hidden = !collectionsMode;
+  $("collIndex").innerHTML = collections
+    .map((c, i) => `<a href="#coll-${i + 1}"><span>${esc(c.number || pad(i + 1))}</span>${esc(c.title)}</a>`)
+    .join("");
 
   const v = info.venue || {};
   const hasVisit = v.name || info.dates || info.hours;
@@ -102,26 +120,72 @@ async function load() {
   // ---- Exhibition text ----
   const essay = info.essay || [];
   $("essaySection").hidden = !essay.length;
-  $("essayTitle").textContent = `${year} ${info.essayTitle || "Exhibition text"}`;
+  $("essayTitle").textContent = info.essayTitle || "Exhibition text";
   $("essay").innerHTML = essay.map((p) => `<p>${esc(p)}</p>`).join("");
 
   // ---- Works ----
-  $("galleryHeading").textContent = `${year} Awardees & Finalists`;
-  $("filters").hidden = !list.some((a) => a.award) || list.every((a) => a.award);
+  const hasAwards = list.some((a) => a.award);
+  $("galleryHeading").textContent = "Awardees & Finalists";
+  $("galleryHeading").hidden = !hasAwards;
+  $("filters").hidden = !hasAwards || list.every((a) => a.award);
   renderWorks();
 
   // ---- Other years ----
   const others = years.filter((y) => y !== year);
   $("yearsSection").hidden = !others.length;
   $("yearsList").innerHTML = others
-    .map((y) => `<a class="ex-year-link" href="/exhibition?year=${y}">${y}<small>Exhibition</small></a>`)
+    .map((y) => `<a class="ex-year-link" href="/exhibition?year=${y}">${esc(labelOf(y))}<small>Exhibition</small></a>`)
     .join("");
 
   window.revealAll?.();
 }
 
+// Collection number for a work number ("01".."07"), used in the pop-up
+const collectionOf = (a) => collections.find((c) => parseWorks(c.works).includes(Number(a.number)));
+function parseWorks(v) {
+  return String(v || "").split(/[^0-9]+/).filter(Boolean).map(Number);
+}
+
 function renderWorks() {
   const shown = filter === "awards" ? allWorks.filter((a) => a.award) : allWorks;
+
+  // ---- Curated collections: each with its number, title, subtitle, text and works ----
+  if (collectionsMode) {
+    const byNum = new Map(shown.map((a) => [Number(a.number), a]));
+    const used = new Set();
+    artworks = [];
+    const blocks = collections.map((c) => {
+      const works = parseWorks(c.works).map((n) => byNum.get(n)).filter(Boolean);
+      const start = artworks.length;
+      works.forEach((a) => { artworks.push(a); used.add(a); });
+      return `
+        <section class="ex-coll reveal" id="coll-${collections.indexOf(c) + 1}">
+          <header class="ex-coll-head">
+            <span class="ex-coll-num">${esc(c.number || "")}</span>
+            <div>
+              <h3>${esc(c.title)}</h3>
+              ${c.subtitle ? `<p class="ex-coll-sub">${esc(c.subtitle)}</p>` : ""}
+            </div>
+            ${c.text ? `<p class="ex-coll-text">${esc(c.text)}</p>` : ""}
+          </header>
+          <div class="ex-grid">${works.map((a, i) => tileHTML(a, start + i)).join("")}</div>
+        </section>`;
+    });
+    // anything not placed in a collection still appears at the end
+    const rest = shown.filter((a) => !used.has(a));
+    if (rest.length) {
+      const start = artworks.length;
+      rest.forEach((a) => artworks.push(a));
+      blocks.push(`<section class="ex-coll"><div class="ex-grid">${rest.map((a, i) => tileHTML(a, start + i)).join("")}</div></section>`);
+    }
+    $("collections").innerHTML = blocks.join("");
+    $("stillsBlock").hidden = $("videosBlock").hidden = true;
+    $("emptyMsg").hidden = shown.length > 0;
+    window.revealAll?.();
+    return;
+  }
+  $("collections").innerHTML = "";
+
   const stills = shown.filter((a) => a.type !== "video");
   const videos = shown.filter((a) => a.type === "video");
   artworks = [...stills, ...videos];
@@ -148,7 +212,10 @@ $("filters").addEventListener("click", (e) => {
 // =========================================================
 function fillPopup(a) {
   const embed = a.type === "video" ? embedUrl(a.videoUrl) : "";
-  if (embed) {
+  if (a.type === "video" && isFileVideo(a.videoUrl)) {
+    // our own video file (e.g. /uploads/2025/26-cell-scan.mp4)
+    $("lbMedia").innerHTML = `<video src="${esc(a.videoUrl)}" poster="${esc(coverOf(a))}" controls autoplay muted loop playsinline></video>`;
+  } else if (embed) {
     $("lbMedia").innerHTML = `<iframe src="${esc(embed)}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
   } else {
     const img = new Image();
@@ -160,13 +227,24 @@ function fillPopup(a) {
   }
 
   $("lbAward").textContent = a.award || "";
+  $("lbKicker").textContent = [a.number && collectionsMode ? `No. ${pad(a.number)}` : "", a.name && a.name !== a.title ? a.name : ""].filter(Boolean).join(" · ");
   $("lbTitle").textContent = a.title;
   $("lbArtists").textContent = a.artists || "";
+  $("lbLab").textContent = a.lab || "";
+  const coll = collectionOf(a);
+  $("lbColl").textContent = coll ? `${coll.number}. ${coll.title}` : "";
+  $("lbCollRow").hidden = !coll;
   $("lbDept").textContent = a.department || "";
   $("lbDeptRow").hidden = !a.department;
-  $("lbYear").textContent = a.year || "";
+  $("lbYear").textContent = label || a.year || "";
   $("lbType").textContent = a.type === "video" ? "Video / Animation" : "Still Image";
-  $("lbDesc").textContent = a.description || "";
+
+  // Text: "Scientific description" and "Lay summary" when both exist, otherwise just the text
+  const block = (heading, text) =>
+    text ? `${heading ? `<h4>${esc(heading)}</h4>` : ""}${String(text).split(/\n\s*\n/).map((p) => `<p>${esc(p)}</p>`).join("")}` : "";
+  $("lbText").innerHTML = a.scientific
+    ? block("Scientific description", a.scientific) + block("Lay summary", a.description)
+    : block(a.number && collectionsMode ? "Lay summary" : "", a.description);
   $("lbCount").textContent = `${pad(current + 1)} / ${pad(artworks.length)}`;
   $("lbInfo").scrollTop = 0;
 

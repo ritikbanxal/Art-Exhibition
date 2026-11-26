@@ -1,0 +1,131 @@
+{
+  "overview": {
+    "title": "The Living Canvas Competition",
+    "heading": "Where Curiosity Meets Creativity",
+    "paragraphs": [
+      "The Living Canvas Art & Life Sciences Competition invites scientists, researchers, students and artists to explore the beauty and complexity of life through visual expression.",
+      "We welcome original scientific photographs, microscopic images, research videos, digital illustrations, data visualizations and artworks inspired by the life sciences.",
+      "The competition celebrates both the scientific discoveries that reveal the extraordinary nature of living systems and the artistic interpretations that encourage us to see life differently.",
+      "Participants are invited to share their work, communicate the science behind their creations and contribute to an interdisciplinary community of discovery.",
+      "Selected submissions may be featured in The Living Canvas digital exhibition, with outstanding entries recognized through juried awards."
+    ],
+    "motto": "Discover Life. Express Science. Inspire Curiosity.",
+    "buttonLabel": "Submit Your Work",
+    "buttonLink": "/contact#submit"
+  },
+  "divisions": {
+    "title": "Competition divisions",
+    "items": [
+      {
+        "name": "Division I — Science Through Research",
+        "text": "For works originating directly from scientific research, observation, experimentation or scientific imaging.",
+        "includes": "Includes microscopy, research photography, biological imaging, simulations, data visualization and research videography."
+      },
+      {
+        "name": "Division II — Science Through Art",
+        "text": "For original creative works inspired by scientific concepts, biological structures or living systems.",
+        "includes": "Includes illustration, photography, painting, digital art, animation, sculpture and mixed-media works."
+      }
+    ]
+  },
+  "categories": {
+    "title": "Submission categories",
+    "items": [
+      { "name": "Scientific Photography", "text": "Photography generated through scientific research or observation" },
+      { "name": "Microscopic & Biomedical Imaging", "text": "Cellular, microscopic, anatomical and medical imagery" },
+      { "name": "Scientific Videography", "text": "Research videos, time-lapse recordings and moving images" },
+      { "name": "Data Visualization & Computational Art", "text": "Scientific models, simulations and visualizations" },
+      { "name": "Scientific Illustration", "text": "Traditional and digital representations of scientific subjects" },
+      { "name": "Science-Inspired Visual Art", "text": "Paintings, drawings, sculpture, digital and mixed-media artworks" },
+      { "name": "Science Communication & Animation", "text": "Educational visual storytelling and scientific animations" }
+    ]
+  },
+  "eligibility": {
+    "title": "Who Can Participate?",
+    "intro": "The Living Canvas Competition welcomes submissions from individuals of diverse academic, professional and artistic backgrounds, including:",
+    "groups": [
+      "High school students",
+      "Undergraduate and graduate students",
+      "Scientists and academic researchers",
+      "Medical and healthcare researchers",
+      "Professional and emerging artists",
+      "Independent science enthusiasts"
+    ],
+    "notes": [
+      "Individual and collaborative submissions are welcome.",
+      "Participants are not required to have formal scientific or artistic training. However, all submissions must demonstrate a meaningful connection to the life sciences.",
+      "Participants under the age of 18 must obtain permission from a parent or legal guardian.",
+      "All participants must have the necessary rights and permissions to submit and publicly exhibit their materials."
+    ]
+  },
+  "guidelines": {
+    "title": "Submission Guidelines",
+    "intro": "We welcome original works that explore scientific discovery, biological complexity or artistic interpretations of the living world.",
+    "requirementsTitle": "Submission Requirements",
+    "requirementsIntro": "Each submission should include:",
+    "requirements": [
+      "An original photograph, video, illustration or other visual artwork.",
+      "A title for the submitted work.",
+      "A brief description of the artwork.",
+      "An explanation of its connection to the life sciences.",
+      "Information about the techniques, materials or scientific methods used.",
+      "Contributor information and appropriate acknowledgements."
+    ],
+    "technicalTitle": "Technical Requirements",
+    "technical": [
+      { "label": "Images", "text": "JPG, JPEG or PNG. High-resolution files are strongly encouraged, preferably at least 2,000 pixels on the longest side." },
+      { "label": "Videos", "text": "MP4 or MOV, preferably between 30 seconds and 5 minutes." },
+      { "label": "Physical artworks", "text": "Submit high-quality photographs of the original work." },
+      { "label": "Data visualizations and illustrations", "text": "Submit a high-resolution digital image or an accessible video format." }
+    ],
+    "integrityTitle": "Scientific Integrity",
+    "integrity": [
+      "Scientific images must accurately represent their original subjects and underlying research. Any significant image manipulation, artificial colouring, compositing or computational processing should be disclosed.",
+      "Generative AI must not be used to fabricate scientific findings or misrepresent research data. Any use of generative AI in creative submissions must be disclosed.",
+      "Participants are responsible for obtaining all necessary permissions relating to research materials, collaborators, intellectual property and identifiable human subjects."
+    ],
+    "selectionTitle": "Selection",
+    "selection": [
+      "Submissions will be reviewed for scientific relevance, artistic merit, originality and their ability to communicate meaningful ideas about the living world.",
+      "Selected works may be featured in The Living Canvas online exhibition and future educational or exhibition initiatives."
+    ]
+  },
+  "judging": {
+    "title": "Judging & Selection",
+    "paragraphs": [
+      "Submissions will be evaluated through an interdisciplinary approach that considers both scientific significance and artistic expression.",
+      "Our aim is to recognize works that reveal meaningful aspects of the living world, demonstrate creativity and encourage audiences to engage with scientific ideas.",
+      "The judging process will consider scientific relevance, aesthetic quality, originality, communication and technical execution.",
+      "Criteria will reflect the distinct objectives of research-based and science-inspired artistic submissions."
+    ],
+    "criteriaLabel": "Judging Criteria",
+    "researchLabel": "Research Division",
+    "artLabel": "Art Division",
+    "criteria": [
+      { "name": "Scientific relevance and accuracy", "research": 30, "art": 20 },
+      { "name": "Artistic and aesthetic quality", "research": 25, "art": 30 },
+      { "name": "Originality and creativity", "research": 20, "art": 25 },
+      { "name": "Science communication", "research": 20, "art": 20 },
+      { "name": "Technical execution", "research": 5, "art": 5 }
+    ]
+  },
+  "awards": {
+    "title": "Celebrating Excellence",
+    "paragraphs": [
+      "The Living Canvas Awards recognize outstanding contributions to the intersection of life sciences, visual arts and scientific communication.",
+      "Through these awards, we celebrate individuals whose work demonstrates curiosity, creativity, scientific understanding and the ability to inspire new perspectives on the living world.",
+      "Selected finalists and award recipients may be featured in The Living Canvas exhibition, digital catalogue and related educational initiatives."
+    ],
+    "items": [
+      { "name": "The Living Canvas Grand Prize", "text": "Overall excellence in bridging life sciences and artistic expression", "featured": true },
+      { "name": "Excellence in Scientific Photography", "text": "Outstanding photography originating from research or observation" },
+      { "name": "Excellence in Scientific Imaging", "text": "Exceptional microscopic, biomedical or biological imagery" },
+      { "name": "Excellence in Scientific Videography", "text": "Outstanding communication of biological processes through moving images" },
+      { "name": "Excellence in Science-Inspired Art", "text": "Original artistic interpretations of the life sciences" },
+      { "name": "Innovation in Scientific Visualization", "text": "Creative representations of scientific data and biological systems" },
+      { "name": "Excellence in Science Communication", "text": "Effective communication of complex scientific ideas" },
+      { "name": "Young Innovator Award", "text": "Exceptional interdisciplinary creativity demonstrated by a young participant" },
+      { "name": "People's Choice Award", "text": "Recognition determined through public voting" }
+    ]
+  }
+}

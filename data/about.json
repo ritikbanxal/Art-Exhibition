@@ -1,64 +1,63 @@
 {
-  "mission": {
-    "eyebrow": "Our mission",
-    "headline": "Where scientific discovery meets artistic vision.",
+  "intro": {
+    "title": "About The Living Canvas",
     "paragraphs": [
-      "This exhibition explores the meeting point of science and art. Works are chosen for their beauty, for their scientific or technical interest, and for their power to spark curiosity across disciplines, cultures and ages.",
-      "Modern imaging and modelling tools capture our world in ways that were impossible a generation ago — sometimes by design, sometimes by happy accident. Seen as art, these images change how we understand nature, and widen who we think of as an artist.",
-      "We invite scientists to see their research with fresh eyes, artists to explore new materials and methods, and everyone else to step into two fields that can often feel out of reach."
+      "The Living Canvas is an interdisciplinary initiative dedicated to exploring the relationship between life sciences, visual arts and scientific communication.",
+      "Scientific research generates extraordinary images and visual materials that often remain within laboratories, academic publications and specialized research communities. Beyond their scientific significance, these images reveal unexpected beauty, complexity and artistic expression.",
+      "The Living Canvas was founded to bring these discoveries into a broader public space.",
+      "Through exhibitions, competitions and educational initiatives, we aim to celebrate the creativity inherent in scientific inquiry, encourage interdisciplinary collaboration and make the life sciences more accessible to audiences of all backgrounds."
+    ],
+    "statement": "We believe that science and art are not separate ways of understanding the world, but complementary approaches to discovery, interpretation and imagination."
+  },
+  "mission": {
+    "title": "Our Mission",
+    "paragraphs": [
+      "Our mission is to bridge the life sciences and the arts by transforming scientific discovery into meaningful visual and educational experiences.",
+      "Through scientific imagery, creative expression and interdisciplinary collaboration, The Living Canvas seeks to inspire curiosity, promote scientific literacy and encourage a deeper appreciation of the complexity and beauty of life.",
+      "We aim to create an inclusive platform where scientists, artists, students and communities can exchange ideas, share discoveries and explore new ways of understanding the living world."
     ]
   },
-  "founded": 2005,
-  "pillars": [
-    {
-      "title": "Aesthetic excellence",
-      "text": "Striking compositions, colour and form that hold your attention on their own — before you know anything about the science behind them."
-    },
-    {
-      "title": "Scientific interest",
-      "text": "Works rooted in real research, observation or data, whose story deepens the more you learn about how they were made."
-    },
-    {
-      "title": "Inspiring creativity",
-      "text": "Pieces that speak across disciplines, languages and ages, and invite new conversations between artists, scientists and the public."
-    }
-  ],
-  "statement": "Science and art are two of the most human ways we have of making sense of the world. This exhibition celebrates what happens when they meet.",
-  "timeline": [
-    { "year": "2005", "title": "The first exhibition", "text": "A small collaboration between researchers and artists opens with a handful of images printed in a hallway." },
-    { "year": "2012", "title": "Moving images", "text": "Videos and animations join the exhibition for the first time." },
-    { "year": "2018", "title": "Going online", "text": "Every exhibited work is published in an online gallery, reaching visitors around the world." },
-    { "year": "2025", "title": "Our biggest show yet", "text": "A record number of submissions from students, researchers, staff and alumni." }
-  ],
-  "organizers": [
-    { "name": "Organizer Name", "role": "Creative Director" },
-    { "name": "Organizer Name", "role": "Studio Manager" },
-    { "name": "Organizer Name", "role": "Professor of Computer Science" },
-    { "name": "Organizer Name", "role": "Lecturer in Visual Arts" }
-  ],
-  "sponsors": [
-    "Department of Physics",
-    "Department of Chemistry",
-    "Computer Science",
-    "Astrophysical Sciences",
-    "Geosciences",
-    "Psychology",
-    "Materials Institute",
-    "Environmental Institute",
-    "Office of Research",
-    "Art & Archaeology"
-  ],
-  "thanks": [
-    { "name": "Person Name", "role": "Print production and mounting" },
-    { "name": "Person Name", "role": "Print coordination" },
-    { "name": "Person Name", "role": "Project management" },
-    { "name": "Person Name", "role": "Event and communications" },
-    { "name": "Person Name", "role": "Studio support" },
-    { "name": "Person Name", "role": "Graduate assistant" }
-  ],
-  "credits": [
-    { "name": "Your Name", "role": "Website design and development" },
-    { "name": "Designer Name", "role": "Logo design" },
-    { "name": "Unsplash.com", "role": "Stock imagery" }
-  ]
+  "vision": {
+    "title": "Our Vision",
+    "paragraphs": [
+      "We envision a community in which scientific discovery is accessible beyond the laboratory, artistic creativity enriches scientific understanding, and interdisciplinary exploration inspires new generations of thinkers and innovators.",
+      "Through visual storytelling and public engagement, The Living Canvas seeks to cultivate a lasting appreciation for the life sciences and their profound connection to human experience."
+    ]
+  },
+  "objectives": {
+    "title": "Our objectives",
+    "items": [
+      { "title": "Celebrate Scientific Discovery", "text": "Showcase the extraordinary visual beauty that emerges through life sciences research." },
+      { "title": "Make Science Accessible", "text": "Translate complex scientific concepts into engaging and accessible visual experiences." },
+      { "title": "Connect Disciplines", "text": "Foster meaningful dialogue between scientists, artists and educators." },
+      { "title": "Inspire Future Innovators", "text": "Encourage young people to explore the life sciences through creativity and interdisciplinary thinking." },
+      { "title": "Promote Public Engagement", "text": "Create opportunities for communities to engage with scientific research beyond academic settings." },
+      { "title": "Recognize Creativity", "text": "Celebrate excellence in scientific imagery, artistic interpretation and science communication." }
+    ]
+  },
+  "founder": {
+    "heading": "Meet Our Founder",
+    "name": "Elizabeth Chen",
+    "role": "Founder & Curator, The Living Canvas",
+    "photo": "",
+    "paragraphs": [
+      "Elizabeth Chen is a student researcher with interdisciplinary interests in biology, neuroscience, psychology and public health.",
+      "Her academic journey has been shaped by her curiosity about the complexity of living systems and the biological mechanisms underlying human health, cognition and behaviour. Through her engagement with competitive biology and scientific research, she has developed an appreciation for both the analytical and creative dimensions of scientific discovery.",
+      "Elizabeth founded The Living Canvas to explore how the visual beauty of scientific research can become a powerful medium for education, communication and interdisciplinary understanding.",
+      "Through curating scientific imagery, engaging with researchers and creating opportunities for artistic collaboration, she hopes to make the life sciences more accessible and inspire others to discover the extraordinary within the seemingly ordinary.",
+      "She believes that meaningful discoveries often emerge when different disciplines, perspectives and ways of thinking come together."
+    ]
+  },
+  "message": {
+    "heading": "A Message from Our Founder",
+    "paragraphs": [
+      "My interest in the life sciences has led me to explore the remarkable complexity of the human body, the brain and the living systems that surround us.",
+      "What particularly fascinates me is that scientific discoveries can be both intellectually meaningful and visually extraordinary. An image produced in a laboratory may reveal not only a biological mechanism but also unexpected patterns, colours and structures that resemble works of art.",
+      "I created The Living Canvas to provide a space where these discoveries could be shared, appreciated and interpreted beyond the scientific community.",
+      "I hope this initiative encourages people to approach science with curiosity, creativity and imagination — and to recognize that scientific discovery is not only about understanding life, but also about appreciating its beauty."
+    ],
+    "signature": "— Elizabeth Chen",
+    "signatureRole": "Founder & Curator, The Living Canvas"
+  },
+  "founded": null
 }

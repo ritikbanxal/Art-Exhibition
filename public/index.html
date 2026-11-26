@@ -102,7 +102,7 @@
   </section>
 
   <!-- ============ QUOTE BAND ============ -->
-  <section class="quote parallax">
+  <section class="quote parallax" data-feature="media">
     <div class="quote-overlay"></div>
     <div class="quote-inner">
       <!-- Filled automatically with the first "featured" quote from data/media.json -->
@@ -114,20 +114,28 @@
     </div>
   </section>
 
-  <!-- ============ CLOSING — text from Admin → Homepage ============ -->
+  <!-- ============ CLOSING — text from Admin → Homepage; images are real artworks ============ -->
   <section class="hm-call">
-    <div class="hm-call-inner reveal">
-      <div>
-        <h2 id="closingHeadline">Every Discovery Has a Story</h2>
+    <div class="hm-call-inner">
+      <div class="hm-call-copy reveal">
+        <p class="hm-call-kicker"><span class="hm-call-dot"></span>The Living Canvas</p>
+        <h2 id="closingHeadline">Every Discovery Has a <em>Story</em></h2>
         <div class="hm-call-text" id="closingText">
           <p>Behind every scientific image is a question, an experiment and a moment of discovery.</p>
         </div>
-        <p class="hm-motto" id="closingMotto">Explore. Discover. Create. Contribute.</p>
+        <div class="hm-call-actions">
+          <a class="hm-call-btn primary" href="/exhibition" id="closingBtn1">Explore the Exhibition</a>
+          <a class="hm-call-link" href="/contact#submit" id="closingBtn2">Submit Your Work</a>
+        </div>
       </div>
-      <div class="hm-call-actions">
-        <a class="btn btn-solid" href="/exhibition" id="closingBtn1">Explore the Exhibition</a>
-        <a class="btn btn-accent" href="/contact#submit" id="closingBtn2">Submit Your Work</a>
-      </div>
+
+      <!-- Three artworks, fanned like prints on a table -->
+      <div class="hm-stack reveal" id="closingStack" aria-hidden="true"></div>
+    </div>
+
+    <!-- Motto as a slow, oversized ticker -->
+    <div class="hm-ticker" aria-label="Explore. Discover. Create. Contribute.">
+      <div class="hm-ticker-track" id="closingMotto"></div>
     </div>
   </section>
 

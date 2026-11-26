@@ -93,6 +93,7 @@ const DOCS = {
   about: "object",
   site: "object",
   home: "object",
+  competition: "object",
 };
 
 function readData(name, fallback) {
@@ -118,7 +119,8 @@ function writeData(name, value) {
   fs.renameSync(tmp, file);
 }
 
-const readArtworks = () => readData("artworks", []);
+// Public site only sees published works ("draft" ones are still being prepared in the admin)
+const readArtworks = () => readData("artworks", []).filter((a) => !a.draft);
 const splitArtists = (s) => String(s || "").split(/,|&| and /i).map((x) => x.trim()).filter(Boolean);
 
 // =========================================================
@@ -156,6 +158,8 @@ app.get("/api/exhibitions", (req, res) => {
       const works = art.filter((a) => Number(a.year) === year);
       return {
         year,
+        label: e.label || String(year),
+        title: e.title || "",
         subtitle: e.subtitle || "",
         dates: e.dates || "",
         cover: e.cover || works.find((a) => a.image)?.image || "",
@@ -175,6 +179,7 @@ app.get("/api/exhibitions/:year", (req, res) => {
 app.get("/api/faq", (req, res) => res.json(readData("faq", [])));
 app.get("/api/about", (req, res) => res.json(readData("about", {})));
 app.get("/api/home", (req, res) => res.json(readData("home", {})));
+app.get("/api/competition", (req, res) => res.json(readData("competition", {})));
 
 app.get("/api/media", (req, res) => {
   const list = readData("media", []);
@@ -289,6 +294,70 @@ app.get("/api/admin/data/:name", requireAdmin, (req, res) => {
   res.json(readData(req.params.name, kind === "array" ? [] : {}));
 });
 
+// =========================================================
+// Feedback form (Contact page) → data/feedback.json → Admin → Messages
+// =========================================================
+const FEEDBACK_MAX = 2000; // keep at most this many messages (oldest dropped)
+const feedbackHits = new Map();
+function feedbackTooFast(ip) {
+  const now = Date.now();
+  const list = (feedbackHits.get(ip) || []).filter((t) => now - t < 10 * 60e3);
+  list.push(now);
+  feedbackHits.set(ip, list);
+  return list.length > 5; // 5 messages per 10 minutes per visitor
+}
+
+app.post("/api/feedback", (req, res) => {
+  const b = req.body || {};
+  const clean = (v, max) => String(v ?? "").trim().slice(0, max);
+  const name = clean(b.name, 100);
+  const email = clean(b.email, 200);
+  const message = clean(b.message, 5000);
+  // Bots fill the hidden "website" field: pretend it worked, store nothing
+  if (b.website) return res.json({ ok: true });
+  if (!name || !message) return res.status(400).json({ error: "Please fill in your name, email and message." });
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(400).json({ error: "Please enter a valid email address." });
+  if (feedbackTooFast(req.ip)) return res.status(429).json({ error: "Too many messages — please try again in a few minutes." });
+
+  const list = readData("feedback", []);
+  list.unshift({ id: crypto.randomUUID(), name, email, message, date: new Date().toISOString(), read: false });
+  const tmp = path.join(DATA_DIR, "feedback.json.tmp");
+  fs.writeFileSync(tmp, JSON.stringify(list.slice(0, FEEDBACK_MAX), null, 2));
+  fs.renameSync(tmp, path.join(DATA_DIR, "feedback.json"));
+  res.json({ ok: true });
+});
+
+app.get("/api/admin/feedback", requireAdmin, (req, res) => res.json(readData("feedback", [])));
+
+app.patch("/api/admin/feedback/:id", requireAdmin, (req, res) => {
+  const list = readData("feedback", []);
+  const item = list.find((m) => m.id === req.params.id);
+  if (!item) return res.status(404).json({ error: "Message not found." });
+  item.read = !!req.body?.read;
+  fs.writeFileSync(path.join(DATA_DIR, "feedback.json"), JSON.stringify(list, null, 2));
+  res.json({ ok: true });
+});
+
+app.delete("/api/admin/feedback/:id", requireAdmin, (req, res) => {
+  const list = readData("feedback", []);
+  const next = list.filter((m) => m.id !== req.params.id);
+  if (next.length === list.length) return res.status(404).json({ error: "Message not found." });
+  fs.writeFileSync(path.join(DATA_DIR, "feedback.json"), JSON.stringify(next, null, 2));
+  res.json({ ok: true });
+});
+
+// The version of a content file that ships with the code (data/ in the repo).
+// On a host with STORAGE_DIR the live copy is separate, so the admin can
+// pull new text from a deploy into the editor, review it, then Save.
+app.get("/api/admin/code-data/:name", requireAdmin, (req, res) => {
+  if (!DOCS[req.params.name]) return res.status(404).json({ error: "Unknown content." });
+  try {
+    res.json(JSON.parse(fs.readFileSync(path.join(REPO_DATA, `${req.params.name}.json`), "utf8")));
+  } catch {
+    res.status(404).json({ error: "This content isn't included in the website code." });
+  }
+});
+
 app.put("/api/admin/data/:name", requireAdmin, (req, res) => {
   const name = req.params.name;
   const kind = DOCS[name];
@@ -327,6 +396,7 @@ function validate(name, body) {
     if (new Set(years).size !== years.length) return "Two exhibitions have the same year.";
     for (const e of body) if (badUrl(e.cover) || badUrl(e.venue?.mapUrl)) return `${e.year} has an invalid link.`;
   }
+  if (name === "competition" && badUrl(body.overview?.buttonLink)) return "The competition button has an invalid link.";
   if (name === "home") {
     const links = [body.hero?.primaryLink, body.hero?.secondaryLink, body.intro?.linkUrl, body.closing?.primaryLink, body.closing?.secondaryLink];
     if (links.some(badUrl)) return "A homepage button has an invalid link.";
@@ -343,6 +413,9 @@ function validate(name, body) {
 // Admin: image upload
 // =========================================================
 const IMAGE_TYPES = { "image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp", "image/gif": ".gif" };
+const VIDEO_TYPES = { "video/mp4": ".mp4", "video/webm": ".webm" };
+const UPLOAD_TYPES = { ...IMAGE_TYPES, ...VIDEO_TYPES };
+const MAX_IMAGE = 20 * 1024 * 1024, MAX_VIDEO = 200 * 1024 * 1024;
 const upload = multer({
   storage: multer.diskStorage({
     destination: UPLOAD_DIR,
@@ -350,21 +423,25 @@ const upload = multer({
       const base = path
         .parse(file.originalname).name.toLowerCase()
         .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40) || "image";
-      cb(null, `${base}-${Date.now().toString(36)}${crypto.randomBytes(3).toString("hex")}${IMAGE_TYPES[file.mimetype]}`);
+      cb(null, `${base}-${Date.now().toString(36)}${crypto.randomBytes(3).toString("hex")}${UPLOAD_TYPES[file.mimetype]}`);
     },
   }),
-  limits: { fileSize: 20 * 1024 * 1024 },
+  limits: { fileSize: MAX_VIDEO },
   fileFilter: (req, file, cb) =>
-    IMAGE_TYPES[file.mimetype] ? cb(null, true) : cb(new Error("Only JPG, PNG, WebP or GIF images are allowed.")),
+    UPLOAD_TYPES[file.mimetype] ? cb(null, true) : cb(new Error("Only JPG, PNG, WebP or GIF images, or MP4 / WebM videos, are allowed.")),
 });
 
 app.post("/api/admin/upload", requireAdmin, (req, res) => {
   upload.single("file")(req, res, (err) => {
     if (err) {
-      const msg = err.code === "LIMIT_FILE_SIZE" ? "Image is too large (max 20 MB)." : err.message;
+      const msg = err.code === "LIMIT_FILE_SIZE" ? "File is too large (videos max 200 MB)." : err.message;
       return res.status(400).json({ error: msg });
     }
     if (!req.file) return res.status(400).json({ error: "No file received." });
+    if (IMAGE_TYPES[req.file.mimetype] && req.file.size > MAX_IMAGE) {
+      fs.unlink(req.file.path, () => {});
+      return res.status(400).json({ error: "Image is too large (max 20 MB)." });
+    }
     res.json({ url: `/uploads/${req.file.filename}` });
   });
 });

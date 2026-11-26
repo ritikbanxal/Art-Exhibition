@@ -6,6 +6,7 @@
   "instagram": "#",
   "youtube": "#",
   "submissionForm": "",
+  "showMedia": false,
   "introImages": [
     {
       "image": "/uploads/intro-1-orbit.svg"

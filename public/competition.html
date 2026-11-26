@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Competition – The Living Canvas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@100;200;300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="competition.css" />
+  <link rel="stylesheet" href="/cursor.css" />
+  <link rel="stylesheet" href="/preloader.css" />
+  <script src="/site-config.js"></script>
+  <script type="importmap">
+    { "imports": { "three": "/vendor/three/three.module.js" } }
+  </script>
+</head>
+<body>
+  <!-- Intro animation + shutter page transitions (must stay first in <body>) -->
+  <script src="/preloader.js"></script>
+
+  <!-- Navbar is inserted here by script.js -->
+  <div id="site-header"></div>
+
+  <!-- All text is filled from Admin → Competition (data/competition.json) -->
+
+  <!-- ============ HERO — floating 3D cells ============ -->
+  <header class="cp-hero">
+    <div class="cp-hero-canvas" id="cellsCanvas" aria-hidden="true"></div>
+    <div class="cp-hero-overlay"></div>
+    <div class="cp-hero-content">
+      <h1 id="ovTitle">The Living Canvas Competition</h1>
+      <p class="cp-hero-sub" id="ovHeading">Where Curiosity Meets Creativity</p>
+      <p class="cp-motto" id="ovMotto">Discover Life. Express Science. Inspire Curiosity.</p>
+      <div class="cp-hero-actions">
+        <a class="btn btn-solid" id="ovButton" href="/contact#submit">Submit Your Work</a>
+        <a class="btn btn-light" href="#guidelines" id="guidelinesBtn">Submission Guidelines</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ SECTION MENU (sticks under the navbar) ============ -->
+  <nav class="cp-subnav" id="subnav" aria-label="Competition sections">
+    <div class="cp-subnav-inner">
+      <a href="#overview">Overview</a>
+      <a href="#divisions">Divisions</a>
+      <a href="#categories">Categories</a>
+      <a href="#eligibility">Eligibility</a>
+      <a href="#guidelines">Guidelines</a>
+      <a href="#judging">Judging</a>
+      <a href="#awards">Awards</a>
+    </div>
+  </nav>
+
+  <!-- ============ OVERVIEW ============ -->
+  <section class="cp-section cp-overview" id="overview">
+    <div class="cp-container cp-overview-grid">
+      <h2 class="cp-overview-heading reveal" id="ovHeading2">Where Curiosity Meets Creativity</h2>
+      <div class="cp-overview-text reveal" id="ovText"></div>
+    </div>
+  </section>
+
+  <!-- ============ DIVISIONS (each with a small 3D visual) ============ -->
+  <section class="cp-section cp-divisions" id="divisions">
+    <div class="cp-container">
+      <h2 class="cp-title reveal" id="divTitle">Competition divisions</h2>
+      <div class="cp-div-grid">
+        <article class="cp-div cp-div-research reveal">
+          <div class="cp-div-visual" id="researchCanvas" aria-hidden="true"></div>
+          <div class="cp-div-body">
+            <span class="cp-div-num">I</span>
+            <h3 data-div="0" data-field="name"></h3>
+            <p data-div="0" data-field="text"></p>
+            <p class="cp-div-includes" data-div="0" data-field="includes"></p>
+          </div>
+        </article>
+        <article class="cp-div cp-div-art reveal">
+          <div class="cp-div-visual" id="artCanvas" aria-hidden="true"></div>
+          <div class="cp-div-body">
+            <span class="cp-div-num">II</span>
+            <h3 data-div="1" data-field="name"></h3>
+            <p data-div="1" data-field="text"></p>
+            <p class="cp-div-includes" data-div="1" data-field="includes"></p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CATEGORIES ============ -->
+  <section class="cp-section cp-categories" id="categories">
+    <div class="cp-container">
+      <h2 class="cp-title reveal" id="catTitle">Submission categories</h2>
+      <ol class="cp-cat-list" id="catList"></ol>
+    </div>
+  </section>
+
+  <!-- ============ ELIGIBILITY ============ -->
+  <section class="cp-section cp-eligibility" id="eligibility">
+    <div class="cp-container cp-elig-grid">
+      <div class="reveal">
+        <h2 class="cp-title cp-left" id="eligTitle">Who Can Participate?</h2>
+        <p class="cp-elig-intro" id="eligIntro"></p>
+      </div>
+      <ul class="cp-who" id="eligGroups"></ul>
+    </div>
+    <div class="cp-container">
+      <div class="cp-notes reveal" id="eligNotes"></div>
+    </div>
+  </section>
+
+  <!-- ============ GUIDELINES ============ -->
+  <section class="cp-section cp-guidelines" id="guidelines">
+    <div class="cp-container">
+      <h2 class="cp-title reveal" id="glTitle">Submission Guidelines</h2>
+      <p class="cp-lead reveal" id="glIntro"></p>
+
+      <div class="cp-gl-grid">
+        <div class="cp-gl-card reveal">
+          <h3 id="reqTitle">Submission Requirements</h3>
+          <p class="cp-gl-sub" id="reqIntro"></p>
+          <ul class="cp-checks" id="reqList"></ul>
+        </div>
+        <div class="cp-gl-card reveal">
+          <h3 id="techTitle">Technical Requirements</h3>
+          <dl class="cp-specs" id="techList"></dl>
+        </div>
+      </div>
+
+      <div class="cp-integrity reveal">
+        <span class="cp-integrity-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>
+        </span>
+        <div>
+          <h3 id="integrityTitle">Scientific Integrity</h3>
+          <div id="integrityText"></div>
+        </div>
+      </div>
+
+      <div class="cp-selection reveal">
+        <h3 id="selectionTitle">Selection</h3>
+        <div id="selectionText"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ JUDGING ============ -->
+  <section class="cp-section cp-judging" id="judging">
+    <div class="cp-container cp-judging-grid">
+      <div class="reveal">
+        <h2 class="cp-title cp-left" id="judgeTitle">Judging & Selection</h2>
+        <div class="cp-judge-text" id="judgeText"></div>
+      </div>
+      <div class="cp-table reveal" id="judgeTable">
+        <div class="cp-table-head">
+          <span id="critLabel">Judging Criteria</span>
+          <span class="k k-research"><i></i><b id="researchLabel">Research Division</b></span>
+          <span class="k k-art"><i></i><b id="artLabel">Art Division</b></span>
+        </div>
+        <div id="critRows"></div>
+        <div class="cp-total"><span>Total</span><b>100%</b><b>100%</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AWARDS ============ -->
+  <section class="cp-section cp-awards" id="awards">
+    <div class="cp-container">
+      <h2 class="cp-title reveal" id="awardsTitle">Celebrating Excellence</h2>
+      <div class="cp-awards-intro reveal" id="awardsText"></div>
+      <div class="cp-award-grid" id="awardList"></div>
+    </div>
+  </section>
+
+  <!-- ============ CALL TO ACTION ============ -->
+  <section class="cp-cta">
+    <div class="cp-cta-inner reveal">
+      <p class="cp-motto" id="ctaMotto">Discover Life. Express Science. Inspire Curiosity.</p>
+      <a class="btn btn-solid" id="ctaButton" href="/contact#submit">Submit Your Work</a>
+      <a class="cp-cta-link" href="/faq">Frequently asked questions &rarr;</a>
+    </div>
+  </section>
+
+  <!-- Footer is inserted here by script.js -->
+  <div id="site-footer"></div>
+  <script src="script.js"></script>
+  <script src="competition.js"></script>
+  <script type="module" src="competition-3d.js"></script>
+  <script src="/cursor.js"></script>
+</body>
+</html>

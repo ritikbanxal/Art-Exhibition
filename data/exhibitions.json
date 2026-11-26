@@ -1,43 +1,90 @@
 [
   {
     "year": 2025,
-    "subtitle": "An exhibition featuring science-based, science-generated and science-inspired artworks made by our community",
-    "cover": "",
+    "label": "2025–2026",
+    "title": "Life Beyond the Visible",
+    "subtitle": "",
+    "cover": "/uploads/2025/04-hidden-layers.jpg",
     "intro": [
-      "The 2025 exhibition opened on May 8, 2025 with a reception attended by over 250 guests. If you missed the opening, or would like to revisit the works, the exhibition remains on view through the 2025–26 academic year."
+      "The exhibition is organized into seven curated collections, each exploring a different aspect of the living world through scientific imagery, artistic expression and visual storytelling."
+    ],
+    "collections": [
+      {
+        "number": "01",
+        "title": "The Architecture of Life",
+        "subtitle": "Exploring the hidden structures that sustain living systems.",
+        "text": "Discover the intricate organization of cells, organelles and molecular structures. Through advanced scientific imaging, this collection reveals the extraordinary architecture within cells and the interconnected systems that support life.",
+        "works": "1, 2, 4, 8, 15, 23"
+      },
+      {
+        "number": "02",
+        "title": "The Shape of Life",
+        "subtitle": "Discovering the extraordinary diversity of biological forms.",
+        "text": "From delicate protein filaments resembling a hummingbird in flight to intricate cellular landscapes, this collection explores the relationship between biological structure, movement and artistic form. It reveals the unexpected beauty and diversity of shapes within the microscopic world.",
+        "works": "5, 6, 7, 9, 10, 25"
+      },
+      {
+        "number": "03",
+        "title": "The Energy Within",
+        "subtitle": "Illuminating the microscopic machinery that powers life.",
+        "text": "Explore the fascinating world of mitochondria and the molecular structures that help sustain cellular activity. This collection reveals the intricate networks, dynamic transformations and biological processes associated with energy production.",
+        "works": "3, 14, 17, 24"
+      },
+      {
+        "number": "04",
+        "title": "Life Under Pressure",
+        "subtitle": "Exploring the relationship between cellular function, stress and disease.",
+        "text": "Living systems continuously respond to changes in their surroundings. Through scientific imagery of oxidative stress, cellular disruption and viral infection, this collection offers a visual perspective on the vulnerability and complexity of biological systems.",
+        "works": "11, 12, 16"
+      },
+      {
+        "number": "05",
+        "title": "Beyond the Limits of Vision",
+        "subtitle": "Expanding human perception through scientific innovation.",
+        "text": "Advanced imaging technologies allow us to observe biological structures that were once beyond the limits of human vision. This collection celebrates the power of super-resolution microscopy and three-dimensional visualization to reveal new dimensions of the living world.",
+        "works": "18, 22"
+      },
+      {
+        "number": "06",
+        "title": "Life in Motion",
+        "subtitle": "Experiencing the dynamic nature of living systems.",
+        "text": "Life is never truly still. Through scientific videography, live-cell imaging and time-lapse microscopy, this collection captures the continuous movement, interaction and reorganization of cellular structures, revealing biological processes as dynamic visual experiences.",
+        "works": "13, 19, 26, 27"
+      },
+      {
+        "number": "07",
+        "title": "Echoes of Nature",
+        "subtitle": "Discovering visual parallels between the microscopic and visible worlds.",
+        "text": "The patterns revealed through scientific microscopy often bear striking similarities to those found in our everyday surroundings. From the delicate trajectories of flying sparks to the overlapping colours of autumn leaves, this collection explores the shared visual language of science, nature and art.",
+        "works": "20, 21"
+      }
     ],
     "venue": {
-      "name": "Main Atrium, Your Venue",
-      "address": "123 Example Street, City",
-      "mapUrl": "https://maps.google.com"
-    },
-    "dates": "May 8, 2025 – June 2026",
-    "hours": "Open daily, 9am – 6pm · Free entry",
-    "essayTitle": "Exhibition text",
-    "essay": [
-      "This year's exhibition marks our tenth show and twentieth year of celebrating the meeting point of science and art — two of the most essential expressions of human creativity.",
-      "Powerful imaging and modelling tools capture our world in new ways, producing striking images by intention or by accident. Seen as art, these works expand our understanding of the human experience, complicate our relationship with the natural world, and redefine who we think of as an artist.",
-      "The works on show span an array of analog, digital and computer-generated methods, and take breathtaking leaps in scale — from microns to light years.",
-      "Above all, they show that science-generated art does more than communicate methods and discoveries. It reminds us how restless, curious and human the scientific imagination can be."
-    ]
-  },
-  {
-    "year": 2024,
-    "subtitle": "Works from the 2024 open call",
-    "cover": "",
-    "intro": [
-      "The 2024 exhibition brought together images and animations from across our community."
-    ],
-    "venue": {
-      "name": "Your Venue",
+      "name": "",
       "address": "",
       "mapUrl": ""
     },
-    "dates": "Spring 2024",
+    "dates": "",
     "hours": "",
-    "essayTitle": "Exhibition text",
-    "essay": [
-      "Replace this with the curatorial text for the 2024 exhibition."
-    ]
+    "essayTitle": "",
+    "essay": []
+  },
+  {
+    "year": 2024,
+    "label": "2024–2025",
+    "title": "",
+    "subtitle": "",
+    "cover": "/uploads/2024/05.jpg",
+    "intro": [],
+    "collections": [],
+    "venue": {
+      "name": "",
+      "address": "",
+      "mapUrl": ""
+    },
+    "dates": "",
+    "hours": "",
+    "essayTitle": "",
+    "essay": []
   }
 ]

@@ -46,6 +46,9 @@ function render(term = "") {
   const t = term.trim().toLowerCase();
   let shown = 0;
 
+  // With only one group there's nothing to choose between: hide the topic menu and group heading
+  document.querySelector(".faq-wrap").classList.toggle("single-group", groups.length < 2);
+
   $("faqList").innerHTML = groups
     .map((g, gi) => {
       const items = g.items.filter((it) => !t || (it.q + " " + it.a).toLowerCase().includes(t));

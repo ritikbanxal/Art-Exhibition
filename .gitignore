@@ -4,9 +4,15 @@ node_modules/
 # Private settings (password, secrets) — set these on the host instead
 .env
 
-# Admin save backups and temp files
+# Admin save backups, visitor messages and temp files
 data/backups/
+data/feedback.json
 *.tmp
+
+# Original artwork folders from the curator (huge print files) —
+# web-sized copies live in public/uploads/2024 and public/uploads/2025
+2024-2025/
+2025-2026 gallery/
 
 # Local tool settings and the old first-draft copy of the homepage
 .claude/

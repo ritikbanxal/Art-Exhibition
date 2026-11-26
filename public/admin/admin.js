@@ -234,23 +234,31 @@ function imageField(f, obj, changed) {
   const name = h("small");
   const bar = h("i");
   const progress = h("div", { class: "progress", hidden: true }, bar);
-  const file = h("input", { type: "file", accept: "image/jpeg,image/png,image/webp,image/gif", hidden: true });
+  const isVideo = f.media === "video";
+  const kind = isVideo ? "video" : "image";
+  const file = h("input", { type: "file", accept: isVideo ? "video/mp4,video/webm" : "image/jpeg,image/png,image/webp,image/gif", hidden: true });
   const upBtn = h("button", { type: "button", class: "btn btn-ghost btn-sm" });
   const rmBtn = h("button", { type: "button", class: "btn btn-danger-ghost btn-sm" }, "Remove");
 
   const show = () => {
     const url = obj[f.key];
-    prev.style.backgroundImage = url ? `url("${url.replace(/"/g, "%22")}")` : "";
-    prev.innerHTML = url ? "" : ICON.image;
-    name.textContent = url ? url.split("/").pop() : "No image yet — click Upload or drag one here";
-    upBtn.textContent = url ? "Replace image" : "Upload image";
+    const own = url && /^\/uploads\//.test(url);
+    prev.style.backgroundImage = url && !isVideo ? `url("${url.replace(/"/g, "%22")}")` : "";
+    prev.innerHTML = isVideo ? (own ? `<video src="${esc(url)}" muted playsinline></video>` : ICON.image) : url ? "" : ICON.image;
+    name.textContent = url ? url.split("/").pop() : `No ${kind} yet — click Upload or drag one here`;
+    upBtn.textContent = url ? `Replace ${kind}` : `Upload ${kind}`;
     rmBtn.hidden = !url;
   };
 
   async function send(f0) {
     if (!f0) return;
-    if (!/^image\/(jpeg|png|webp|gif)$/.test(f0.type)) return toast("Please choose a JPG, PNG, WebP or GIF image.", "error");
-    if (f0.size > 20 * 1024 * 1024) return toast("That image is over 20 MB. Please use a smaller file.", "error");
+    if (isVideo) {
+      if (!/^video\/(mp4|webm)$/.test(f0.type)) return toast("Please choose an MP4 or WebM video.", "error");
+      if (f0.size > 200 * 1024 * 1024) return toast("That video is over 200 MB. Please use a smaller file.", "error");
+    } else {
+      if (!/^image\/(jpeg|png|webp|gif)$/.test(f0.type)) return toast("Please choose a JPG, PNG, WebP or GIF image.", "error");
+      if (f0.size > 20 * 1024 * 1024) return toast("That image is over 20 MB. Please use a smaller file.", "error");
+    }
     progress.hidden = false;
     bar.style.width = "0%";
     upBtn.disabled = true;
@@ -259,7 +267,7 @@ function imageField(f, obj, changed) {
       obj[f.key] = url;
       show();
       changed();
-      toast("Image uploaded");
+      toast(isVideo ? "Video uploaded" : "Image uploaded");
     } catch (e) {
       toast(e.message, "error");
     } finally {
@@ -439,6 +447,23 @@ function setPage(title, sub = "", ...actions) {
   $("#topActions").replaceChildren(...actions);
   document.title = `${title} · Admin`;
 }
+// "Load from code" for list pages (Artworks, Exhibition Years): replaces the live
+// list with the one that ships with the website code. The server keeps a backup.
+const codeBtn = (name, what, reload) =>
+  h("button", {
+    class: "btn btn-ghost",
+    title: "Use the list that came with the latest website update",
+    onclick: async () => {
+      if (!(await confirmDialog(`Replace all ${what} on the live site with the version from the website code? A backup of the current list is kept.`, "Replace"))) return;
+      try {
+        await save(name, await api(`/api/admin/code-data/${name}`));
+        toast(`${what[0].toUpperCase()}${what.slice(1)} loaded from code`);
+        reload();
+      } catch (e) {
+        toast(e.message, "error");
+      }
+    },
+  }, "Load from code");
 const primaryBtn = (label, onclick) => h("button", { class: "btn btn-primary", html: `${ICON.plus} ${esc(label)}`, onclick });
 const searchBox = (placeholder, oninput) =>
   h("label", { class: "search", html: ICON.search }, h("input", { type: "search", placeholder, oninput: (e) => oninput(e.target.value) }));
@@ -450,20 +475,28 @@ const AWARDS = ["Jury Award", "People's Choice", "Honorable Mention", "Director'
 
 const ARTWORK_FIELDS = [
   { key: "title", label: "Title", required: true },
+  { key: "number", label: "Work number", type: "number", half: true, help: "Used by the year's collections (e.g. 12)" },
+  { key: "name", label: "Working name", half: true, help: "Optional second name shown in the pop-up" },
   { key: "artists", label: "Artist(s)", half: true, help: "Separate several names with commas" },
+  { key: "lab", label: "Lab", half: true, placeholder: "Lab: Dr. …" },
   { key: "department", label: "Department / field", half: true },
   { key: "year", label: "Exhibition year", type: "number", required: true, half: true },
   { key: "award", label: "Award", half: true, suggestions: AWARDS, help: "Leave empty for finalists" },
   { key: "type", label: "Type", type: "select", half: true, rerender: true, options: [["image", "Still image"], ["video", "Video / animation"]] },
-  { key: "videoUrl", label: "Video link", type: "url", half: true, placeholder: "https://www.youtube.com/watch?v=…", help: "YouTube or Vimeo", showIf: (o) => o.type === "video" },
+  { key: "videoUrl", label: "Video file", type: "image", media: "video", rerender: true, help: "Upload an MP4 or WebM (up to 200 MB), or paste a YouTube / Vimeo link below.", showIf: (o) => o.type === "video" },
+  { key: "videoUrl", label: "…or video link", type: "url", placeholder: "https://www.youtube.com/watch?v=…", help: "YouTube or Vimeo (filled in automatically when you upload a file)", showIf: (o) => o.type === "video" },
   { key: "image", label: "Image", type: "image", help: "JPG, PNG or WebP, up to 20 MB. For videos this is the cover (optional for YouTube — its thumbnail is used)." },
-  { key: "description", label: "Description", type: "textarea", tall: true, help: "Shown in the artwork pop-up. Leave a blank line between paragraphs." },
+  { key: "scientific", label: "Scientific description", type: "textarea", tall: true, help: "Optional. When filled, the pop-up shows it above the lay summary." },
+  { key: "description", label: "Lay summary / description", type: "textarea", tall: true, help: "Shown in the artwork pop-up. Leave a blank line between paragraphs." },
+  { key: "draft", label: "Hidden (draft)", type: "checkbox", help: "Keeps this work off the website until it's ready, e.g. while its media is missing." },
 ];
 
 const EXHIBITION_FIELDS = [
-  { key: "year", label: "Year", type: "number", required: true, half: true },
+  { key: "year", label: "Year", type: "number", required: true, half: true, help: "Used for ordering and links" },
+  { key: "label", label: "Display name", half: true, placeholder: "2025–2026", help: "Shown in the menu, e.g. \"2025–2026 Exhibition\"" },
+  { key: "title", label: "Exhibition title", half: true, placeholder: "Life Beyond the Visible" },
   { key: "dates", label: "Dates", half: true, placeholder: "May 8, 2025 – June 2026" },
-  { key: "subtitle", label: "Banner subtitle", placeholder: "An exhibition featuring science-based… artworks" },
+  { key: "subtitle", label: "Banner subtitle", placeholder: "Only used when there's no exhibition title" },
   { key: "cover", label: "Cover image", type: "image", help: "Shown behind the banner and intro. If empty, the first artwork is used." },
   { key: "intro", label: "Intro text", type: "paragraphs", help: "Shown on the dark band under the banner. Blank line = new paragraph." },
   {
@@ -477,6 +510,19 @@ const EXHIBITION_FIELDS = [
   { key: "hours", label: "Opening hours", placeholder: "Open daily, 9am – 6pm · Free entry" },
   { key: "essayTitle", label: "Essay heading", half: true, placeholder: "Exhibition text" },
   { key: "essay", label: "Exhibition text (essay)", type: "paragraphs", tall: true, help: "Blank line = new paragraph." },
+  {
+    key: "collections", label: "Collections", type: "list", collapsible: true,
+    help: "Optional. When a year has collections, its page shows the works grouped under them.",
+    itemLabel: (c) => [c.number, c.title].filter(Boolean).join(". ") || "New collection",
+    newItem: () => ({ number: "", title: "", subtitle: "", text: "", works: "" }),
+    fields: [
+      { key: "number", label: "Number", half: true, placeholder: "01" },
+      { key: "title", label: "Title", half: true },
+      { key: "subtitle", label: "Subtitle", placeholder: "One line, shown in italics" },
+      { key: "text", label: "Text", type: "textarea" },
+      { key: "works", label: "Work numbers", placeholder: "1, 2, 4, 8", help: "The work number of each artwork in this collection, in order" },
+    ],
+  },
 ];
 
 const MEDIA_TYPES = [["article", "Article"], ["video", "Video"], ["audio", "Audio / radio"], ["pdf", "PDF"]];
@@ -510,56 +556,194 @@ const FAQ_FIELDS = [
 
 const ABOUT_SECTIONS = [
   {
-    title: "Mission", sub: "The large headline and text at the top of the About page.",
+    title: "About", sub: "The banner title and the opening text. The first paragraph is shown large on the left.",
     fields: [{
-      key: "mission", type: "group", label: "",
+      key: "intro", type: "group", label: "",
       fields: [
-        { key: "eyebrow", label: "Small heading", half: true, placeholder: "Our mission" },
-        { key: "headline", label: "Headline" },
-        { key: "paragraphs", label: "Text", type: "paragraphs", tall: true, help: "Blank line = new paragraph. The first paragraph is shown larger." },
+        { key: "title", label: "Page title", placeholder: "About The Living Canvas" },
+        { key: "paragraphs", label: "Text", type: "paragraphs", tall: true, help: "Blank line = new paragraph." },
+        { key: "statement", label: "Statement (large quote band)", type: "textarea", help: "Leave empty to hide the band." },
       ],
     }],
   },
   {
-    title: "Numbers", sub: "Exhibitions, artworks and creators are counted automatically from your artworks.",
-    fields: [{ key: "founded", label: "Year founded", type: "number", half: true, help: 'Used for "Years running".' }],
-  },
-  {
-    title: "What we look for",
+    title: "Our Mission",
     fields: [{
-      key: "pillars", label: "", type: "list", itemName: "Card", addLabel: "Add card", itemLabel: (p) => p.title, newItem: () => ({ title: "", text: "" }),
-      fields: [{ key: "title", label: "Title" }, { key: "text", label: "Text", type: "textarea" }],
-    }],
-  },
-  { title: "Statement", sub: "The large quote on the purple band.", fields: [{ key: "statement", label: "", type: "textarea" }] },
-  {
-    title: "Our story (timeline)",
-    fields: [{
-      key: "timeline", label: "", type: "list", itemName: "Milestone", addLabel: "Add milestone", itemLabel: (t) => [t.year, t.title].filter(Boolean).join(" — "),
-      newItem: () => ({ year: "", title: "", text: "" }),
-      fields: [{ key: "year", label: "Year", half: true }, { key: "title", label: "Title", half: true }, { key: "text", label: "Text", type: "textarea" }],
+      key: "mission", type: "group", label: "",
+      fields: [
+        { key: "title", label: "Heading", half: true },
+        { key: "paragraphs", label: "Text", type: "paragraphs", tall: true, help: "Blank line = new paragraph." },
+      ],
     }],
   },
   {
-    title: "Organizers",
+    title: "Our Vision",
     fields: [{
-      key: "organizers", label: "", type: "list", itemName: "Person", addLabel: "Add organizer", itemLabel: (p) => p.name, newItem: () => ({ name: "", role: "", photo: "" }),
-      fields: [{ key: "name", label: "Name", half: true }, { key: "role", label: "Role", half: true }, { key: "photo", label: "Photo (optional)", type: "image", help: "Square photos work best. Without a photo, initials are shown." }],
-    }],
-  },
-  { title: "Sponsors", fields: [{ key: "sponsors", label: "Sponsor names", type: "lines", tall: true, help: "One sponsor per line." }] },
-  {
-    title: "Special thanks",
-    fields: [{
-      key: "thanks", label: "", type: "list", itemName: "Person", addLabel: "Add person", itemLabel: (p) => p.name, newItem: () => ({ name: "", role: "" }),
-      fields: [{ key: "name", label: "Name", half: true }, { key: "role", label: "For", half: true }],
+      key: "vision", type: "group", label: "",
+      fields: [
+        { key: "title", label: "Heading", half: true },
+        { key: "paragraphs", label: "Text", type: "paragraphs", tall: true, help: "Blank line = new paragraph." },
+      ],
     }],
   },
   {
-    title: "Site credits",
+    title: "Our objectives",
     fields: [{
-      key: "credits", label: "", type: "list", itemName: "Credit", addLabel: "Add credit", itemLabel: (p) => p.name, newItem: () => ({ name: "", role: "" }),
-      fields: [{ key: "name", label: "Name", half: true }, { key: "role", label: "Role", half: true }],
+      key: "objectives", type: "group", label: "",
+      fields: [
+        { key: "title", label: "Heading", half: true },
+        {
+          key: "items", label: "Objectives", type: "list", itemName: "Objective", addLabel: "Add objective",
+          itemLabel: (o) => o.title, newItem: () => ({ title: "", text: "" }),
+          fields: [{ key: "title", label: "Objective" }, { key: "text", label: "Description", type: "textarea" }],
+        },
+      ],
+    }],
+  },
+  {
+    title: "Meet Our Founder",
+    fields: [{
+      key: "founder", type: "group", label: "",
+      fields: [
+        { key: "heading", label: "Heading", half: true },
+        { key: "name", label: "Name", half: true },
+        { key: "role", label: "Title / role" },
+        { key: "photo", label: "Photo (optional)", type: "image", help: "A portrait photo works best. Without a photo, her initials are shown." },
+        { key: "paragraphs", label: "Biography", type: "paragraphs", tall: true, help: "Blank line = new paragraph." },
+      ],
+    }],
+  },
+  {
+    title: "A Message from Our Founder",
+    fields: [{
+      key: "message", type: "group", label: "",
+      fields: [
+        { key: "heading", label: "Heading", half: true },
+        { key: "paragraphs", label: "Message", type: "paragraphs", tall: true, help: "Blank line = new paragraph." },
+        { key: "signature", label: "Signature", half: true },
+        { key: "signatureRole", label: "Signature line 2", half: true },
+      ],
+    }],
+  },
+  {
+    title: "Homepage badge", sub: "Optional. If set, the homepage shows how many years the initiative has been running.",
+    fields: [{ key: "founded", label: "Year founded", type: "number", half: true }],
+  },
+];
+
+const COMPETITION_SECTIONS = [
+  {
+    title: "Overview", sub: "The top of the Competition page.",
+    fields: [{
+      key: "overview", type: "group", label: "",
+      fields: [
+        { key: "title", label: "Page title" },
+        { key: "heading", label: "Heading" },
+        { key: "paragraphs", label: "Text", type: "paragraphs", tall: true, help: "Blank line = new paragraph." },
+        { key: "motto", label: "Motto line" },
+        { key: "buttonLabel", label: "Button text", half: true },
+        { key: "buttonLink", label: "Button link", half: true, placeholder: "/contact#submit" },
+      ],
+    }],
+  },
+  {
+    title: "Competition divisions",
+    fields: [{
+      key: "divisions", type: "group", label: "",
+      fields: [
+        { key: "title", label: "Heading", half: true },
+        {
+          key: "items", label: "Divisions (the first two get the 3D visuals)", type: "list", itemName: "Division", addLabel: "Add division",
+          itemLabel: (d) => d.name, newItem: () => ({ name: "", text: "", includes: "" }),
+          fields: [{ key: "name", label: "Name" }, { key: "text", label: "Description", type: "textarea" }, { key: "includes", label: "Includes", type: "textarea" }],
+        },
+      ],
+    }],
+  },
+  {
+    title: "Submission categories",
+    fields: [{
+      key: "categories", type: "group", label: "",
+      fields: [
+        { key: "title", label: "Heading", half: true },
+        {
+          key: "items", label: "Categories", type: "list", itemName: "Category", addLabel: "Add category", collapsible: true,
+          itemLabel: (c) => c.name, newItem: () => ({ name: "", text: "" }),
+          fields: [{ key: "name", label: "Category", half: true }, { key: "text", label: "Description", half: true }],
+        },
+      ],
+    }],
+  },
+  {
+    title: "Eligibility",
+    fields: [{
+      key: "eligibility", type: "group", label: "",
+      fields: [
+        { key: "title", label: "Heading", half: true },
+        { key: "intro", label: "Intro", type: "textarea" },
+        { key: "groups", label: "Who can take part", type: "lines", help: "One per line." },
+        { key: "notes", label: "Notes", type: "paragraphs", help: "Blank line = new note." },
+      ],
+    }],
+  },
+  {
+    title: "Submission guidelines",
+    fields: [{
+      key: "guidelines", type: "group", label: "",
+      fields: [
+        { key: "title", label: "Heading", half: true },
+        { key: "intro", label: "Intro", type: "textarea" },
+        { key: "requirementsTitle", label: "Requirements heading", half: true },
+        { key: "requirementsIntro", label: "Requirements intro", half: true },
+        { key: "requirements", label: "Requirements", type: "lines", tall: true, help: "One per line." },
+        { key: "technicalTitle", label: "Technical heading", half: true },
+        {
+          key: "technical", label: "Technical requirements", type: "list", itemName: "Requirement", addLabel: "Add requirement",
+          itemLabel: (t) => t.label, newItem: () => ({ label: "", text: "" }),
+          fields: [{ key: "label", label: "Type", half: true }, { key: "text", label: "Requirement", type: "textarea" }],
+        },
+        { key: "integrityTitle", label: "Integrity heading", half: true },
+        { key: "integrity", label: "Scientific integrity", type: "paragraphs", tall: true, help: "Blank line = new paragraph." },
+        { key: "selectionTitle", label: "Selection heading", half: true },
+        { key: "selection", label: "Selection", type: "paragraphs", help: "Blank line = new paragraph." },
+      ],
+    }],
+  },
+  {
+    title: "Judging & selection", sub: "Percentages are shown as bars on the page.",
+    fields: [{
+      key: "judging", type: "group", label: "",
+      fields: [
+        { key: "title", label: "Heading", half: true },
+        { key: "paragraphs", label: "Text", type: "paragraphs", tall: true, help: "Blank line = new paragraph." },
+        { key: "criteriaLabel", label: "Table: first column", half: true },
+        { key: "researchLabel", label: "Table: second column", half: true },
+        { key: "artLabel", label: "Table: third column", half: true },
+        {
+          key: "criteria", label: "Criteria", type: "list", itemName: "Criterion", addLabel: "Add criterion",
+          itemLabel: (r) => `${r.name || ""} — ${r.research ?? ""}% / ${r.art ?? ""}%`, newItem: () => ({ name: "", research: 0, art: 0 }),
+          fields: [{ key: "name", label: "Criterion" }, { key: "research", label: "Research %", type: "number", half: true }, { key: "art", label: "Art %", type: "number", half: true }],
+        },
+      ],
+    }],
+  },
+  {
+    title: "Awards",
+    fields: [{
+      key: "awards", type: "group", label: "",
+      fields: [
+        { key: "title", label: "Heading", half: true },
+        { key: "paragraphs", label: "Text", type: "paragraphs", tall: true, help: "Blank line = new paragraph." },
+        {
+          key: "items", label: "Awards", type: "list", itemName: "Award", addLabel: "Add award", collapsible: true,
+          itemLabel: (a) => a.name, newItem: () => ({ name: "", text: "", featured: false }),
+          fields: [
+            { key: "name", label: "Award" },
+            { key: "text", label: "Description", type: "textarea" },
+            { key: "featured", label: "Highlight", type: "checkbox", checkLabel: "Show as the large featured award (e.g. Grand Prize)" },
+          ],
+        },
+      ],
     }],
   },
 ];
@@ -626,6 +810,11 @@ const SITE_SECTIONS = [
       { key: "email", label: "Contact email", type: "email", half: true },
       { key: "location", label: "Venue / city", half: true },
     ],
+  },
+  {
+    title: "Pages",
+    sub: "Hidden pages keep all their content — they're just removed from the menu, footer and homepage.",
+    fields: [{ key: "showMedia", label: "Media Coverage", type: "checkbox", checkLabel: "Show the Media Coverage page in the menu, footer and the press quote on the homepage" }],
   },
   {
     title: "Submissions",
@@ -721,7 +910,7 @@ async function showArtworks(param) {
       title: isNew ? "Add artwork" : "Edit artwork",
       fields: ARTWORK_FIELDS,
       value: art,
-      validate: (d) => (d.type === "image" && !d.image ? "Please upload an image." : d.type === "video" && !d.videoUrl && !d.image ? "Add a video link or a cover image." : null),
+      validate: (d) => (d.draft ? null : d.type === "image" && !d.image ? "Please upload an image." : d.type === "video" && !d.videoUrl && !d.image ? "Add a video link or a cover image." : null),
       onSave: async (d) => {
         d.year = Number(d.year);
         const next = isNew ? [...list, d] : list.map((a) => (a === art ? d : a));
@@ -754,7 +943,7 @@ async function showArtworks(param) {
     try { await persist("Order saved"); } catch (e) { toast(e.message, "error"); }
   };
 
-  setPage("Artworks", "Everything shown in the exhibition galleries", primaryBtn("Add artwork", addNew));
+  setPage("Artworks", "Everything shown in the exhibition galleries", codeBtn("artworks", "artworks", () => showArtworks()), primaryBtn("Add artwork", addNew));
 
   const yearSel = h("select", { onchange: (e) => { year = e.target.value; draw(); } });
   const typeSel = h("select", { onchange: (e) => { type = e.target.value; draw(); } },
@@ -771,7 +960,7 @@ async function showArtworks(param) {
     const shown = list.filter((a) =>
       (yearSel.value === "all" || String(a.year) === yearSel.value) &&
       (type === "all" || (a.type || "image") === type) &&
-      (!q || [a.title, a.artists, a.award, a.department].join(" ").toLowerCase().includes(q)));
+      (!q || [a.title, a.name, a.number, a.artists, a.award, a.department].join(" ").toLowerCase().includes(q)));
     count.textContent = `${shown.length} of ${plural(list.length, "artwork")}`;
 
     if (!list.length) {
@@ -790,10 +979,10 @@ async function showArtworks(param) {
             h("div", { class: "art-thumb", onclick: () => edit(a) },
               cover ? h("img", { src: cover, alt: "", loading: "lazy" }) : null,
               a.type === "video" ? h("span", { class: "play", html: ICON.play }) : null,
-              a.award ? h("span", { class: "badge" }, a.award) : null),
+              a.draft ? h("span", { class: "badge draft" }, "Hidden") : a.award ? h("span", { class: "badge" }, a.award) : null),
             h("div", { class: "art-body", onclick: () => edit(a) },
               h("b", {}, a.title || "Untitled"),
-              h("small", {}, a.artists || "No artist yet")),
+              h("small", {}, a.artists || (a.number ? `No. ${a.number}${a.name && a.name !== a.title ? ` · ${a.name}` : ""}` : "No artist yet"))),
             h("div", { class: "art-actions" },
               h("span", { class: "yr" }, a.department || ""),
               (() => { const b = iconBtn("left", "Move earlier", () => move(a, -1)); b.disabled = i === 0; return b; })(),
@@ -848,7 +1037,7 @@ async function showExhibitions(param) {
     edit({ year: y, subtitle: "", cover: "", intro: [], venue: { name: "", address: "", mapUrl: "" }, dates: "", hours: "", essayTitle: "Exhibition text", essay: [] });
   };
 
-  setPage("Exhibition Years", "Intro text, venue, dates and essay for each year's page", primaryBtn("Add exhibition year", addNew));
+  setPage("Exhibition Years", "Titles, collections, intro text, venue and dates for each year's page", codeBtn("exhibitions", "exhibition years", () => showExhibitions()), primaryBtn("Add exhibition year", addNew));
   const body = h("div");
   $("#content").replaceChildren(
     h("p", { class: "panel-sub", style: "margin-bottom:16px" }, "The newest year appears in the menu as the current exhibition. Artworks are added under Artworks."),
@@ -939,18 +1128,102 @@ async function showMedia(param) {
   if (param === "new") addNew();
 }
 
+// ---------- Messages (feedback form on the Contact page) ----------
+async function refreshUnread() {
+  try {
+    const list = await api("/api/admin/feedback");
+    const n = list.filter((m) => !m.read).length;
+    $("#unreadCount").textContent = n;
+    $("#unreadCount").hidden = !n;
+    return list;
+  } catch {
+    return [];
+  }
+}
+
+async function showMessages() {
+  let list = await refreshUnread();
+  let q = "";
+  setPage("Messages", "Feedback sent from the Contact page");
+  const count = h("span", { class: "count" });
+  const body = h("div");
+  $("#content").replaceChildren(h("div", { class: "toolbar" }, searchBox("Search name, email or message…", (v) => { q = v.toLowerCase(); draw(); }), count), body);
+
+  const fmt = (iso) => new Date(iso).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
+  const setRead = async (m, read) => {
+    await api(`/api/admin/feedback/${m.id}`, { method: "PATCH", json: { read } });
+    m.read = read;
+    refreshUnread();
+  };
+
+  function draw() {
+    const shown = list.filter((m) => !q || `${m.name} ${m.email} ${m.message}`.toLowerCase().includes(q));
+    count.textContent = `${plural(list.length, "message")}, ${list.filter((m) => !m.read).length} new`;
+    if (!list.length) {
+      body.replaceChildren(h("div", { class: "empty" }, h("b", {}, "No messages yet"), "Messages sent with the feedback form on the Contact page appear here."));
+      return;
+    }
+    body.replaceChildren(...shown.map((m) => {
+      const card = h("div", { class: `msg${m.read ? "" : " unread"}` });
+      const head = h("div", { class: "msg-head", onclick: async () => {
+        card.classList.toggle("open");
+        if (card.classList.contains("open") && !m.read) {
+          try { await setRead(m, true); card.classList.remove("unread"); } catch (e) { toast(e.message, "error"); }
+        }
+      } },
+        h("div", { class: "msg-who" }, h("b", {}, m.name), h("small", {}, `${m.email} — ${m.message.slice(0, 90)}`)),
+        h("span", { class: "msg-date" }, fmt(m.date)));
+      const reply = `mailto:${encodeURIComponent(m.email)}?subject=${encodeURIComponent("Re: your message to " + (window.SITE?.name || "us"))}`;
+      card.append(head, h("div", { class: "msg-body" },
+        h("div", { class: "msg-text" }, m.message),
+        h("div", { class: "msg-actions" },
+          h("a", { class: "btn btn-primary btn-sm", href: reply }, "Reply by email"),
+          h("button", { class: "btn btn-ghost btn-sm", onclick: async () => {
+            try { await setRead(m, false); card.classList.add("unread"); card.classList.remove("open"); } catch (e) { toast(e.message, "error"); }
+          } }, "Mark as unread"),
+          h("button", { class: "btn btn-danger-ghost btn-sm", onclick: async () => {
+            if (!(await confirmDialog(`Delete the message from ${m.name}? This can't be undone.`))) return;
+            try {
+              await api(`/api/admin/feedback/${m.id}`, { method: "DELETE" });
+              list = list.filter((x) => x !== m);
+              toast("Message deleted");
+              refreshUnread();
+              draw();
+            } catch (e) { toast(e.message, "error"); }
+          } }, "Delete"))));
+      return card;
+    }));
+  }
+  draw();
+}
+
 // ---------- Document editors (FAQ, About, Settings) ----------
-async function showDocument({ name, title, sub, sections, toDoc = (d) => d, fromDoc = (d) => d, after }) {
-  const original = await load(name);
+async function showDocument(opts) {
+  const { name, title, sub, sections, toDoc = (d) => d, fromDoc = (d) => d, after, initial } = opts;
+  const original = initial ?? (await load(name));
   const doc = toDoc(clone(original));
   let dirty = false;
 
-  setPage(title, sub);
+  // "Load text from code": fills the editor with the version that ships with the
+  // website code (e.g. new text you pushed). Nothing is saved until "Save changes".
+  const loadFromCode = async () => {
+    if (!(await confirmDialog("Replace what's in this editor with the version from the website code? Nothing is saved until you click Save changes.", "Load"))) return;
+    try {
+      const fresh = await api(`/api/admin/code-data/${name}`);
+      await showDocument({ ...opts, initial: fresh, startDirty: true });
+      toast("Loaded from code — review it, then click Save changes");
+    } catch (e) {
+      toast(e.message, "error");
+    }
+  };
+  setPage(title, sub, h("button", { class: "btn btn-ghost", onclick: loadFromCode, title: "Use the text that came with the latest website update" }, "Load text from code"));
+
   const bar = h("div", { class: "savebar" },
     h("span", {}, "You have unsaved changes"),
     h("button", { class: "btn btn-ghost btn-sm", onclick: () => route(true) }, "Discard"),
     h("button", { class: "btn btn-primary btn-sm", onclick: () => docSave() }, "Save changes"));
   const markDirty = () => { dirty = true; bar.classList.add("show"); };
+  if (opts.startDirty) setTimeout(markDirty);
 
   const panels = sections.map((s) =>
     h("div", { class: "panel doc-section" },
@@ -983,6 +1256,8 @@ const showFaq = () =>
     fromDoc: (d) => d.categories,
   });
 
+const showCompetition = () => showDocument({ name: "competition", title: "Competition", sub: "Everything on the Competition page", sections: COMPETITION_SECTIONS });
+
 const showHome = () => showDocument({ name: "home", title: "Homepage", sub: "Hero, introduction and closing text on the homepage", sections: HOME_SECTIONS });
 
 const showAbout = () => showDocument({ name: "about", title: "About Page", sub: "Everything on the About page", sections: ABOUT_SECTIONS });
@@ -999,10 +1274,12 @@ const showSite = () =>
 // =========================================================
 const SECTIONS = {
   dashboard: showDashboard,
+  messages: showMessages,
   artworks: showArtworks,
   exhibitions: showExhibitions,
   media: showMedia,
   home: showHome,
+  competition: showCompetition,
   faq: showFaq,
   about: showAbout,
   site: showSite,
@@ -1056,6 +1333,7 @@ function showLogin() {
 async function showApp() {
   $("#loginScreen").hidden = true;
   $("#app").hidden = false;
+  refreshUnread(); // shows the number of new messages next to "Messages"
   await route(true);
 }
 

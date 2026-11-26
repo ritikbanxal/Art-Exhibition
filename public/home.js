@@ -12,6 +12,7 @@
   };
 
   // Helpers: set text / fill paragraphs / set a button — only when there's content
+  const esc = (v) => String(v).replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[ch]);
   const setText = (id, value) => { if (value) $(id).textContent = value; };
   const setParas = (id, list) => {
     const paras = (list || []).filter(Boolean);
@@ -42,16 +43,71 @@
     if (i.linkLabel) $("introLink").textContent = `${i.linkLabel} →`;
     if (i.linkUrl) $("introLink").href = i.linkUrl;
 
-    setText("closingHeadline", c.headline);
+    // Headline: the last word in the accent colour ("…Has a Story")
+    if (c.headline) {
+      const words = c.headline.trim().split(/\s+/);
+      const last = words.pop();
+      $("closingHeadline").innerHTML = `${esc(words.join(" "))} <em>${esc(last)}</em>`;
+    }
     setParas("closingText", c.paragraphs);
-    setText("closingMotto", c.motto);
+    // Motto ticker: the words repeated so the strip loops seamlessly
+    const motto = (c.motto || "Explore. Discover. Create. Contribute.").split(/[.·|,]+/).map((w) => w.trim()).filter(Boolean);
+    const run = motto.map((w) => `<span>${esc(w)}</span>`).join("");
+    $("closingMotto").innerHTML = `<div>${run}${run}</div><div aria-hidden="true">${run}${run}</div>`;
     setButton("closingBtn1", c.primaryLabel, c.primaryLink);
     setButton("closingBtn2", c.secondaryLabel, c.secondaryLink);
   });
 
+  // ---------- Closing: three artworks fanned like prints ----------
+  // Front print = the current exhibition's cover (Admin → Exhibition Years);
+  // the two behind it = the first work of two other collections.
+  Promise.all([json("/api/artworks", []), json("/api/exhibitions", [])]).then(async ([list, exs]) => {
+    const host = $("closingStack");
+    if (!host) return;
+    const current = exs[0];
+    const info = current ? await json(`/api/exhibitions/${current.year}`, {}) : {};
+    const stills = list.filter((a) => a.image && a.type !== "video");
+    const ofYear = stills.filter((a) => !current || a.year === current.year);
+    const pool = ofYear.length >= 3 ? ofYear : stills;
+    const front = pool.find((a) => a.image === info.cover) || pool[0];
+
+    const chosen = [front];
+    const byNum = new Map(pool.map((a) => [Number(a.number), a]));
+    for (const c of info.collections || []) {
+      const first = String(c.works || "").split(/[^0-9]+/).filter(Boolean).map(Number).map((n) => byNum.get(n)).find(Boolean);
+      if (first && !chosen.includes(first)) chosen.push(first);
+      if (chosen.length === 3) break;
+    }
+    for (const a of pool) { if (chosen.length === 3) break; if (!chosen.includes(a)) chosen.push(a); }
+    if (chosen.length < 3 || !front) { host.hidden = true; return; }
+
+    const [f, b1, b2] = chosen;
+    host.innerHTML = [b1, b2, f]
+      .map((a, i) => `
+        <a class="hm-print p${i + 1}" href="/exhibition?year=${a.year}" tabindex="-1">
+          <img src="${esc(a.image)}" alt="" loading="lazy" />
+          ${i === 2 ? `<span class="hm-print-cap">${esc(a.title)}</span>` : ""}
+        </a>`)
+      .join("");
+  });
+
   // ---------- Numbers strip + years badge ----------
   Promise.all([json("/api/stats", {}), json("/api/about", {})]).then(([stats, about]) => {
-    if (about.founded) $("aboutYears").textContent = `${new Date().getFullYear() - about.founded}+`;
+    // Years badge + "Years running": only when a founding year is set (Admin → About Page)
+    const founded = Number(about.founded) || 0;
+    if (founded) {
+      $("aboutYears").textContent = `${new Date().getFullYear() - founded}+`;
+    } else {
+      // No year: show the site's initials in the badge ("The Living Canvas" → "LC")
+      const name = (window.SITE && window.SITE.name) || "";
+      $("aboutYears").textContent = name.split(/\s+/).filter((w) => w && !/^the$/i.test(w)).map((w) => w[0].toUpperCase()).join("").slice(0, 3);
+      $("aboutYears").nextElementSibling.hidden = true;
+      const yearsStat = document.querySelector('[data-count="years"]')?.closest(".hm-stat");
+      if (yearsStat) {
+        yearsStat.remove();
+        document.querySelector(".hm-stats-inner")?.classList.add("three");
+      }
+    }
 
     const values = {
       years: about.founded ? new Date().getFullYear() - about.founded : 0,
@@ -114,7 +170,7 @@
   // ---------- Press quote band: first featured quote ----------
   json("/api/media", []).then((list) => {
     const q = list.find((m) => m.featured && m.quote);
-    if (!q) return;
+    if (!q || !$("homeQuote")) return; // band is hidden while Media Coverage is switched off
     $("homeQuote").textContent = `“${q.quote}”`;
     $("homeQuoteOutlet").textContent = `–${q.outlet}`;
   });

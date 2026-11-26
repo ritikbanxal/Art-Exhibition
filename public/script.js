@@ -21,7 +21,7 @@ const escHTML = (s = "") =>
   String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const SITE = Object.fromEntries(Object.entries(window.SITE).map(([k, v]) => [k, escHTML(v)]));
 
-// ---------- Navbar + search overlay ----------
+// ---------- Navbar ----------
 const headerHTML = `
   <nav class="navbar" id="navbar">
     <a href="/" class="logo"><span class="logo-text">${SITE.name}</span></a>
@@ -29,23 +29,19 @@ const headerHTML = `
       <span></span><span></span><span></span>
     </button>
     <ul class="nav-links" id="navLinks">
-      <li><a href="/exhibition" data-current-year-link>Current Exhibition</a></li>
-      <li class="has-dropdown">
-        <a href="/archive">Exhibition Archive <span class="caret">&#8964;</span></a>
-        <!-- Filled automatically: previous year + "Pre-<previous year>" (see below) -->
+      <li class="has-dropdown" data-nav="exhibition archive">
+        <a href="/exhibition" data-current-year-link data-keep-label>Exhibitions <span class="caret">&#8964;</span></a>
+        <!-- Filled automatically: every exhibition year + "All exhibitions" (see below) -->
         <ul class="dropdown" data-year-menu></ul>
       </li>
-      <li><a href="/about">About</a></li>
-      <li><a href="/media">Media Coverage</a></li>
-      <li><a href="/faq">FAQ</a></li>
-      <li><a href="/contact">Contact</a></li>
-      <li><button class="search-btn" id="searchBtn" aria-label="Search">&#9906;</button></li>
+      <li data-nav="competition"><a href="/competition">Competition</a></li>
+      <li data-nav="about"><a href="/about">About</a></li>
+      <li data-feature="media" data-nav="media"><a href="/media">Media Coverage</a></li>
+      <li data-nav="faq"><a href="/faq">FAQ</a></li>
+      <li data-nav="contact"><a href="/contact">Contact</a></li>
+      <li class="nav-cta-item"><a class="nav-cta" href="/contact#submit" data-submit-nav>Submit Your Work</a></li>
     </ul>
-  </nav>
-  <div class="search-overlay" id="searchOverlay">
-    <button class="search-close" id="searchClose" aria-label="Close search">&times;</button>
-    <input type="search" placeholder="Type and hit enter..." />
-  </div>`;
+  </nav>`;
 
 // ---------- Footer ----------
 const icon = {
@@ -72,6 +68,7 @@ const footerHTML = `
         <ul>
           <li><a href="/exhibition" data-current-year-link>Current Exhibition</a></li>
           <li><a href="/archive">Exhibition Archive</a></li>
+          <li><a href="/competition">Competition</a></li>
           <li><a href="/about">About</a></li>
         </ul>
       </div>
@@ -79,7 +76,7 @@ const footerHTML = `
       <div class="f-col">
         <h4>Information</h4>
         <ul>
-          <li><a href="/media">Media Coverage</a></li>
+          <li data-feature="media"><a href="/media">Media Coverage</a></li>
           <li><a href="/faq">FAQ</a></li>
           <li><a href="/contact#submit">Submit Artwork</a></li>
           <li><a href="/contact">Contact</a></li>
@@ -111,6 +108,12 @@ document.getElementById("site-footer")?.remove();
 // Fill site details anywhere on the page (name, email, links) + the browser tab title.
 // These set text/attributes directly, so they use the raw (unescaped) values.
 const RAW = window.SITE;
+
+// Media Coverage is hidden unless switched on in Admin → Settings → Pages.
+// (Anything marked data-feature="media" disappears: menu/footer links, homepage quote band.)
+if (RAW.showMedia !== true) {
+  document.querySelectorAll('[data-feature="media"]').forEach((el) => el.remove());
+}
 const fill = (sel, fn) => document.querySelectorAll(sel).forEach(fn);
 fill("[data-site-name]", (el) => (el.textContent = RAW.name));
 fill("[data-site-email]", (el) => (el.textContent = RAW.email));
@@ -127,31 +130,39 @@ fill("[data-submit-link]", (el) => {
     el.removeAttribute("href");
   }
 });
+if (RAW.submissionForm) fill("[data-submit-nav]", (el) => { el.href = RAW.submissionForm; el.target = "_blank"; el.rel = "noopener"; });
 if (!RAW.submissionForm) fill("[data-submit-note]", (el) => (el.textContent = `Questions? Email ${RAW.email}`));
 document.title = document.title.replace(/The Living Canvas/g, RAW.name);
 
-// ---------- Menu: newest year on its own, archive dropdown for the rest ----------
-//   2025 Exhibition  |  Exhibition Archive ▾  → 2024 Exhibition
-//                                             → Pre-2024   (all older years)
-fetch("/api/years")
+// ---------- Menu: "Exhibitions ▾" → every year (newest first) + All exhibitions ----------
+fetch("/api/exhibitions")
   .then((r) => r.json())
-  .then((years) => {
-    const [, previous, ...older] = years;
-    const items = [];
-    if (previous) items.push(`<li><a href="/exhibition?year=${previous}">${previous} Exhibition</a></li>`);
-    if (older.length) items.push(`<li><a href="/archive?before=${previous}">Pre-${previous}</a></li>`);
+  .then((list) => {
+    const name = (e) => `${e.label || e.year} Exhibition`;
+    const current = list[0];
+    const items = list.map((e, i) =>
+      `<li><a href="/exhibition?year=${e.year}">${escHTML(name(e))}${i === 0 ? ' <small class="dd-tag">Current</small>' : ""}</a></li>`);
+    if (list.length > 1) items.push(`<li class="dd-sep"><a href="/archive">All exhibitions &rarr;</a></li>`);
     document.querySelectorAll("[data-year-menu]").forEach((menu) => {
       menu.innerHTML = items.join("");
-      menu.closest(".has-dropdown")?.classList.toggle("no-items", !items.length);
+      menu.closest(".has-dropdown")?.classList.toggle("no-items", list.length < 2);
     });
-    if (years.length) {
+    if (current) {
       document.querySelectorAll("[data-current-year-link]").forEach((a) => {
-        a.href = `/exhibition?year=${years[0]}`;
-        a.textContent = `${years[0]} Exhibition`;
+        a.href = `/exhibition?year=${current.year}`;
+        if (!a.hasAttribute("data-keep-label")) a.textContent = name(current);
       });
     }
   })
   .catch(() => {});
+
+// Highlight the menu item for the page you're on
+{
+  const page = location.pathname.replace(/^\/|\.html$/g, "").split("/")[0];
+  document.querySelectorAll("[data-nav]").forEach((li) => {
+    if (page && li.dataset.nav.split(" ").includes(page)) li.classList.add("active");
+  });
+}
 
 // ---------- Navbar turns white + back-to-top button after scrolling ----------
 const navbar = document.getElementById("navbar");
@@ -191,13 +202,7 @@ document.getElementById("menuToggle").addEventListener("click", () =>
   document.getElementById("navLinks").classList.toggle("open")
 );
 
-// ---------- Search overlay ----------
-const searchOverlay = document.getElementById("searchOverlay");
-document.getElementById("searchBtn").addEventListener("click", () => {
-  searchOverlay.classList.add("open");
-  searchOverlay.querySelector("input").focus();
-});
-document.getElementById("searchClose").addEventListener("click", () => searchOverlay.classList.remove("open"));
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") searchOverlay.classList.remove("open");
+// Close the mobile menu after choosing a link (e.g. /contact#submit on the same page)
+document.getElementById("navLinks").addEventListener("click", (e) => {
+  if (e.target.closest("a")) document.getElementById("navLinks").classList.remove("open");
 });

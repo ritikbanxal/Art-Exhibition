@@ -20,55 +20,35 @@
   <!-- Navbar is inserted here by script.js -->
   <div id="site-header"></div>
 
-  <!-- ============ BANNER ============ -->
-  <header class="page-banner ex-banner" id="exBanner">
-    <div class="page-banner-overlay"></div>
-    <div class="page-banner-content">
-      <h1 id="pageTitle">Exhibition</h1>
-      <p class="page-banner-sub" id="pageSub"></p>
-    </div>
-  </header>
-
-  <!-- ============ INTRO + VISIT (over a dark image, like the original) ============ -->
-  <section class="ex-intro-band" id="introBand">
-    <div class="ex-intro-overlay"></div>
-    <div class="ex-intro-inner">
-      <div class="ex-intro-text reveal">
-        <p class="ex-eyebrow" id="introEyebrow">The exhibition</p>
-        <p class="ex-lead" id="introCount">Loading…</p>
-        <div class="ex-intro-paras" id="introParas"></div>
-        <a class="btn btn-light" href="#works">Browse the works &darr;</a>
+  <!-- ============ HERO: title, intro, key facts and collection index ============ -->
+  <header class="ex-hero" id="exBanner">
+    <div class="ex-hero-bg" aria-hidden="true"></div>
+    <div class="ex-hero-inner">
+      <div class="ex-hero-main">
+        <p class="ex-hero-kicker" id="pageSub"></p>
+        <h1 class="ex-hero-title" id="pageTitle">Exhibition</h1>
+        <p class="ex-hero-lead" id="introCount"></p>
+        <div class="ex-hero-paras" id="introParas"></div>
+        <a class="ex-hero-btn" href="#works">Browse the works <span aria-hidden="true">&darr;</span></a>
       </div>
 
-      <aside class="ex-visit reveal" id="visitCard" hidden>
-        <h3>Visit</h3>
-        <dl>
-          <div id="visitWhereRow">
-            <dt>
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
-              Location
-            </dt>
-            <dd><strong id="visitName"></strong><span id="visitAddress"></span></dd>
-          </div>
-          <div id="visitDatesRow">
-            <dt>
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
-              Dates
-            </dt>
-            <dd id="visitDates"></dd>
-          </div>
-          <div id="visitHoursRow">
-            <dt>
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-              Hours
-            </dt>
-            <dd id="visitHours"></dd>
-          </div>
-        </dl>
-        <a class="ex-map" id="visitMap" href="#" target="_blank" rel="noopener">Map it &rarr;</a>
+      <aside class="ex-hero-side">
+        <dl class="ex-facts" id="heroFacts"></dl>
+
+        <div class="ex-visit" id="visitCard" hidden>
+          <h3>Visit</h3>
+          <dl>
+            <div id="visitWhereRow"><dt>Location</dt><dd><strong id="visitName"></strong><span id="visitAddress"></span></dd></div>
+            <div id="visitDatesRow"><dt>Dates</dt><dd id="visitDates"></dd></div>
+            <div id="visitHoursRow"><dt>Hours</dt><dd id="visitHours"></dd></div>
+          </dl>
+          <a class="ex-map" id="visitMap" href="#" target="_blank" rel="noopener">Map it &rarr;</a>
+        </div>
       </aside>
     </div>
-  </section>
+
+    <nav class="ex-index" id="collIndex" aria-label="Collections" hidden></nav>
+  </header>
 
   <!-- ============ EXHIBITION TEXT (curatorial essay) ============ -->
   <section class="ex-essay" id="essaySection" hidden>
@@ -85,6 +65,9 @@
         <button class="ex-chip" data-filter="awards">Award winners</button>
       </div>
     </div>
+
+    <!-- Curated collections (used when the year has collections, e.g. 2025–2026) -->
+    <div id="collections"></div>
 
     <div id="stillsBlock">
       <h3 class="ex-group-title">Still Images <span id="stillsCount"></span></h3>
@@ -120,16 +103,19 @@
       <aside class="lb-info">
         <div class="lb-info-body" id="lbInfo">
           <span class="lb-award" id="lbAward"></span>
+          <p class="lb-kicker" id="lbKicker"></p>
           <h2 class="lb-title" id="lbTitle"></h2>
           <p class="lb-artists" id="lbArtists"></p>
+          <p class="lb-lab" id="lbLab"></p>
 
           <dl class="lb-meta">
+            <div id="lbCollRow"><dt>Collection</dt><dd id="lbColl"></dd></div>
             <div id="lbDeptRow"><dt>Department</dt><dd id="lbDept"></dd></div>
             <div><dt>Exhibition</dt><dd id="lbYear"></dd></div>
             <div><dt>Medium</dt><dd id="lbType"></dd></div>
           </dl>
 
-          <p class="lb-desc" id="lbDesc"></p>
+          <div class="lb-text" id="lbText"></div>
         </div>
 
         <div class="lb-footer">

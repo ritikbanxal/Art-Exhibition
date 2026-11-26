@@ -27,11 +27,11 @@ async function load() {
       <a class="ar-card" href="/exhibition?year=${e.year}" style="animation-delay:${i * 0.06}s">
         <div class="ar-media">
           ${e.cover ? `<img src="${esc(e.cover)}" alt="" loading="lazy" />` : ""}
-          <span class="ar-year">${e.year}</span>
+          <span class="ar-year">${esc(e.label || String(e.year))}</span>
         </div>
         <div class="ar-body">
-          <h3>${e.year} Exhibition</h3>
-          ${e.subtitle ? `<p class="ar-sub">${esc(e.subtitle)}</p>` : ""}
+          <h3>${esc(e.title || `${e.label || e.year} Exhibition`)}</h3>
+          ${e.title ? `<p class="ar-sub">${esc(`${e.label || e.year} Exhibition`)}</p>` : e.subtitle ? `<p class="ar-sub">${esc(e.subtitle)}</p>` : ""}
           <div class="ar-meta">
             <span><b>${e.works}</b> work${e.works === 1 ? "" : "s"}</span>
             ${e.awards ? `<span><b>${e.awards}</b> award${e.awards === 1 ? "" : "s"}</span>` : ""}

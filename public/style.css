@@ -96,7 +96,7 @@ ul { list-style: none; }
 
 .nav-links { display: flex; align-items: center; gap: 30px; }
 .nav-links > li { position: relative; }
-.nav-links a, .search-btn {
+.nav-links a {
   font-size: 13px;
   font-weight: 500;
   letter-spacing: 1.2px;
@@ -104,15 +104,38 @@ ul { list-style: none; }
   color: var(--white);
   transition: color .3s;
 }
-.navbar.scrolled .nav-links a,
-.navbar.scrolled .search-btn { color: #333; }
+.navbar.scrolled .nav-links a { color: #333; }
 .nav-links a:hover { color: var(--accent) !important; }
 .caret { font-size: 11px; margin-left: 4px; }
 
-.search-btn {
-  background: none; border: none; cursor: pointer;
-  font-size: 18px; transform: rotate(-45deg);
+/* Current page: a small accent line under the item */
+.nav-links > li.active > a { position: relative; }
+.nav-links > li.active > a::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -7px; height: 2px;
+  background: var(--accent); border-radius: 1px;
 }
+.nav-links > li.has-dropdown.active > a::after { right: 16px; }
+
+/* "Submit Your Work" — the one button in the menu */
+.nav-links a.nav-cta {
+  display: inline-flex; align-items: center;
+  padding: 10px 20px;
+  border-radius: 999px;
+  background: var(--accent); color: #fff !important;
+  letter-spacing: 1.2px;
+  transition: background .25s, transform .25s;
+}
+.nav-links a.nav-cta:hover { background: #111; color: #fff !important; transform: translateY(-1px); }
+.navbar.scrolled .nav-links a.nav-cta { color: #fff; }
+
+.dropdown .dd-tag {
+  margin-left: 8px; padding: 2px 7px; border-radius: 999px;
+  font-size: 9.5px; letter-spacing: 1px; vertical-align: 1px;
+  background: #fbeef1; color: var(--accent);
+}
+.dropdown .dd-sep { border-top: 1px solid #eee; margin-top: 6px; padding-top: 6px; }
+.navbar .dropdown a { white-space: nowrap; }
+.has-dropdown .dropdown { min-width: 270px; }
 
 /* Dropdown — white panel with dark uppercase items */
 .dropdown {
@@ -146,26 +169,6 @@ ul { list-style: none; }
 .menu-toggle { display: none; background: none; border: none; cursor: pointer; }
 .menu-toggle span { display: block; width: 26px; height: 2px; margin: 5px 0; background: var(--white); }
 .navbar.scrolled .menu-toggle span { background: #333; }
-
-/* =========================================================
-   Search overlay
-   ========================================================= */
-.search-overlay {
-  position: fixed; inset: 0; z-index: 200;
-  background: rgba(0,0,0,.92);
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; visibility: hidden; transition: .3s;
-}
-.search-overlay.open { opacity: 1; visibility: visible; }
-.search-overlay input {
-  width: min(700px, 85vw);
-  background: none; border: none; border-bottom: 1px solid #fff;
-  color: #fff; font: 200 36px var(--font); padding: 10px 0; outline: none;
-}
-.search-close {
-  position: absolute; top: 30px; right: 40px;
-  background: none; border: none; color: #fff; font-size: 48px; cursor: pointer;
-}
 
 /* =========================================================
    Hero
@@ -372,10 +375,15 @@ ul { list-style: none; }
 /* =========================================================
    Responsive
    ========================================================= */
-@media (max-width: 960px) {
-  .navbar, .navbar.scrolled { padding: 16px 20px; }
+/* Menu: tighter spacing on mid-size screens, hamburger below 1100px
+   (the logo + 5 items + the Submit button need about 1080px on one line) */
+@media (max-width: 1240px) {
+  .nav-links { gap: 22px; }
+  .nav-links a { letter-spacing: .8px; }
+  .navbar, .navbar.scrolled { padding-left: 36px; padding-right: 36px; }
+}
+@media (max-width: 1100px) {
   .menu-toggle { display: block; }
-  .logo-text { font-size: 20px; letter-spacing: 3px; }
   .nav-links {
     position: fixed; top: 0; right: 0;
     height: 100vh; width: 270px;
@@ -386,12 +394,22 @@ ul { list-style: none; }
     transition: transform .35s;
   }
   .nav-links.open { transform: none; }
-  .nav-links a, .navbar.scrolled .nav-links a, .search-btn { color: var(--white) !important; }
+  .nav-links a, .navbar.scrolled .nav-links a { color: var(--white) !important; }
+  .nav-links > li.active > a::after { display: none; }
+  .nav-links > li.active > a { color: var(--accent) !important; }
+  .nav-cta-item { margin-top: 14px; }
+  .dropdown .dd-tag { background: rgba(215,52,93,.2); }
+  .dropdown .dd-sep { border-top-color: rgba(255,255,255,.12); }
   .dropdown { position: static; opacity: 1; visibility: visible; transform: none; background: none; box-shadow: none; padding: 4px 0 0 12px; min-width: 0; }
   .dropdown::before { display: none; }
   .navbar .dropdown a { padding: 8px 0; opacity: .75; }
   .navbar .dropdown a:hover { background: none; }
   .menu-toggle { position: relative; z-index: 2; }
+}
+
+@media (max-width: 960px) {
+  .navbar, .navbar.scrolled { padding: 16px 20px; }
+  .logo-text { font-size: 20px; letter-spacing: 3px; }
 
   .hero h1 { font-size: 38px; letter-spacing: 6px; }
   .media-band { padding: 90px 20px; }

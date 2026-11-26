@@ -20,98 +20,75 @@
   <!-- Navbar is inserted here by script.js -->
   <div id="site-header"></div>
 
+  <!-- All text below is filled from Admin → About Page (data/about.json) -->
+
   <!-- ============ BANNER ============ -->
   <header class="page-banner about-banner">
     <div class="page-banner-overlay"></div>
     <div class="page-banner-content">
-      <h1>About</h1>
-      <p class="page-banner-sub">The story behind <span data-site-name>The Living Canvas</span></p>
+      <h1 id="introTitle">About The Living Canvas</h1>
     </div>
   </header>
 
-  <!-- ============ MISSION ============ -->
-  <section class="ab-mission ab-container">
-    <div class="ab-mission-head reveal">
-      <p class="ab-eyebrow" id="missionEyebrow">Our mission</p>
-      <h2 id="missionHeadline"></h2>
-    </div>
-    <div class="ab-mission-body reveal" id="missionBody"></div>
+  <!-- ============ ABOUT ============ -->
+  <section class="ab-intro ab-container">
+    <p class="ab-intro-lead reveal" id="introLead"></p>
+    <div class="ab-intro-body reveal" id="introBody"></div>
   </section>
 
-  <!-- ============ NUMBERS (live from the artworks data) ============ -->
-  <section class="ab-stats">
-    <div class="ab-stats-inner ab-container">
-      <div class="ab-stat reveal"><span class="ab-num" data-count="years">0</span><span class="ab-label">Years running</span></div>
-      <div class="ab-stat reveal"><span class="ab-num" data-count="exhibitions">0</span><span class="ab-label">Exhibitions</span></div>
-      <div class="ab-stat reveal"><span class="ab-num" data-count="artworks">0</span><span class="ab-label">Artworks shown</span></div>
-      <div class="ab-stat reveal"><span class="ab-num" data-count="creators">0</span><span class="ab-label">Creators</span></div>
-    </div>
-  </section>
-
-  <!-- ============ WHAT WE LOOK FOR ============ -->
-  <section class="ab-pillars ab-container">
-    <div class="ab-section-head reveal">
-      <p class="ab-eyebrow">Selection</p>
-      <h2>What we look for</h2>
-      <p>Every submission is reviewed by a panel of artists and scientists against three qualities.</p>
-    </div>
-    <div class="ab-pillar-grid" id="pillars"></div>
-  </section>
-
-  <!-- ============ STATEMENT BAND ============ -->
-  <section class="ab-statement parallax">
+  <!-- ============ STATEMENT ============ -->
+  <section class="ab-statement parallax" id="statementSection">
     <div class="ab-statement-overlay"></div>
     <blockquote class="ab-statement-text reveal" id="statement"></blockquote>
   </section>
 
-  <!-- ============ TIMELINE ============ -->
-  <section class="ab-timeline ab-container">
-    <div class="ab-section-head reveal">
-      <p class="ab-eyebrow">History</p>
-      <h2>Our story</h2>
-    </div>
-    <ol class="ab-tl" id="timeline"></ol>
+  <!-- ============ MISSION + VISION ============ -->
+  <section class="ab-mv ab-container">
+    <article class="ab-mv-card ab-mission reveal">
+      <span class="ab-mv-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>
+      </span>
+      <h2 id="missionTitle">Our Mission</h2>
+      <div id="missionBody"></div>
+    </article>
+    <article class="ab-mv-card ab-vision reveal">
+      <span class="ab-mv-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+      </span>
+      <h2 id="visionTitle">Our Vision</h2>
+      <div id="visionBody"></div>
+    </article>
   </section>
 
-  <!-- ============ ACKNOWLEDGEMENTS ============ -->
-  <section class="ab-ack">
+  <!-- ============ OBJECTIVES ============ -->
+  <section class="ab-objectives">
     <div class="ab-container">
-      <div class="ab-section-head reveal">
-        <p class="ab-eyebrow">Acknowledgements</p>
-        <h2>The people behind the exhibition</h2>
-      </div>
-
-      <h3 class="ab-sub reveal">Organizers</h3>
-      <div class="ab-people" id="organizers"></div>
-
-      <h3 class="ab-sub reveal">Sponsors</h3>
-      <p class="ab-sub-intro reveal">We are grateful for the support of this year's sponsors.</p>
-      <div class="ab-sponsors" id="sponsors"></div>
-
-      <div class="ab-lists">
-        <div class="reveal">
-          <h3 class="ab-sub">Special thanks</h3>
-          <ul class="ab-list" id="thanks"></ul>
-        </div>
-        <div class="reveal">
-          <h3 class="ab-sub">Site credits</h3>
-          <ul class="ab-list" id="credits"></ul>
-        </div>
-      </div>
+      <h2 class="ab-section-title reveal" id="objectivesTitle">Our objectives</h2>
+      <div class="ab-obj-grid" id="objectives"></div>
     </div>
   </section>
 
-  <!-- ============ CALL TO ACTION ============ -->
-  <section class="ab-cta">
-    <div class="ab-cta-card reveal">
-      <div>
-        <p class="ab-eyebrow">Open call</p>
-        <h2>Be part of the next exhibition.</h2>
-        <p>Share the moment your research became art.</p>
-      </div>
-      <div class="ab-cta-actions">
-        <a class="btn btn-solid" href="/contact#submit">Submit Artwork</a>
-        <a class="btn btn-light" href="/exhibition">View Exhibition</a>
+  <!-- ============ FOUNDER ============ -->
+  <section class="ab-founder ab-container">
+    <div class="ab-founder-card reveal">
+      <div class="ab-founder-photo" id="founderPhoto" aria-hidden="true"></div>
+      <h3 id="founderName"></h3>
+      <p id="founderRole"></p>
+    </div>
+    <div class="ab-founder-text reveal">
+      <h2 id="founderHeading">Meet Our Founder</h2>
+      <div id="founderBody"></div>
+    </div>
+  </section>
+
+  <!-- ============ FOUNDER'S MESSAGE ============ -->
+  <section class="ab-message">
+    <div class="ab-message-inner reveal">
+      <h2 id="messageHeading">A Message from Our Founder</h2>
+      <div class="ab-letter" id="messageBody"></div>
+      <div class="ab-signature">
+        <strong id="signature"></strong>
+        <span id="signatureRole"></span>
       </div>
     </div>
   </section>

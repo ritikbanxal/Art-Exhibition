@@ -143,6 +143,7 @@
   padding: 64px 30px;
   display: grid; grid-template-columns: repeat(4, 1fr);
 }
+.hm-stats-inner.three { grid-template-columns: repeat(3, 1fr); }
 .hm-stat { text-align: center; padding: 8px 16px; border-left: 1px solid #26262b; }
 .hm-stat:first-child { border-left: none; }
 .hm-stat b {
@@ -201,23 +202,118 @@
 html.no-webgl .hm-ring { display: none; }
 
 /* ---------- Open call ---------- */
-.hm-call { padding: 110px 30px; background: #f7f5f2; }
+.hm-call {
+  position: relative; overflow: hidden;
+  padding: 130px 0 0;
+  background: #f7f5f2;
+  border-top: 1px solid #ece8e2;
+}
 .hm-call-inner {
-  max-width: 1200px; margin: 0 auto;
-  display: grid; grid-template-columns: 1.4fr 1fr; gap: 60px; align-items: center;
+  max-width: 1200px; margin: 0 auto; padding: 0 30px;
+  display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: 80px; align-items: center;
 }
-.hm-call h2 { font-size: 40px; font-weight: 200; letter-spacing: 1px; line-height: 1.2; color: #151515; margin-bottom: 16px; }
-.hm-call-text p { color: #666; font-size: 18px; line-height: 1.75; max-width: 620px; }
+
+.hm-call-kicker {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 7px 14px 7px 10px;
+  border: 1px solid #e3ded6; border-radius: 999px; background: #fff;
+  font-size: 11.5px; letter-spacing: 2.5px; text-transform: uppercase; color: #555;
+  margin-bottom: 30px;
+}
+.hm-call-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px rgba(215,52,93,.14); }
+.hm-call h2 {
+  font-size: clamp(40px, 5.4vw, 70px); font-weight: 200; line-height: 1.02; letter-spacing: -1px;
+  color: #141414;
+  margin-bottom: 34px;
+}
+.hm-call h2 em {
+  font-style: normal; font-weight: 300; color: var(--accent);
+  position: relative; white-space: nowrap;
+}
+.hm-call h2 em::after {          /* hand-drawn style underline */
+  content: ""; position: absolute; left: 2px; right: 0; bottom: -6px; height: 10px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 10' preserveAspectRatio='none'%3E%3Cpath d='M2 7 C 50 2, 120 2, 198 6' fill='none' stroke='%23d7345d' stroke-width='2' stroke-linecap='round' opacity='.55'/%3E%3C/svg%3E") no-repeat center/100% 100%;
+}
+.hm-call-text { padding-left: 22px; border-left: 1px solid #ddd6cc; }
+.hm-call-text p { font-size: 16.5px; line-height: 1.85; color: #6f6f6f; max-width: 540px; }
+.hm-call-text p:first-child { font-size: 20px; font-weight: 300; line-height: 1.6; color: #1d1d1d; }
 .hm-call-text p + p { margin-top: 14px; }
-.hm-motto {
-  margin-top: 28px;
-  font-size: 14px; font-weight: 400;
-  letter-spacing: 3px; text-transform: uppercase;
-  color: var(--accent);
+
+.hm-call-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 28px; margin-top: 42px; }
+.hm-call-btn {
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 16px 30px; border-radius: 999px;
+  background: #141414; color: #fff;
+  font-size: 13.5px; letter-spacing: 2.2px; text-transform: uppercase;
+  transition: background .3s, transform .3s;
 }
-.hm-call-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
-.hm-call-actions .btn { min-width: 240px; text-align: center; padding: 14px 28px; }
-.hm-call .btn-solid:hover { background: #111; border-color: #111; color: #fff; }
+.hm-call-btn::after { content: "→"; transition: transform .3s; }
+.hm-call-btn:hover { background: var(--accent); transform: translateY(-2px); }
+.hm-call-btn:hover::after { transform: translateX(4px); }
+.hm-call-link {
+  position: relative;
+  font-size: 13.5px; letter-spacing: 2.2px; text-transform: uppercase; color: #141414;
+  padding-bottom: 4px;
+}
+.hm-call-link::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+  background: var(--accent); transform-origin: left; transition: transform .35s;
+}
+.hm-call-link:hover { color: var(--accent); }
+.hm-call-link:hover::after { transform: scaleX(.35); }
+.hm-call-btn[hidden], .hm-call-link[hidden] { display: none; }
+
+/* ---- Fanned prints ---- */
+.hm-stack { position: relative; height: 520px; }
+.hm-stack[hidden] { display: none; }
+.hm-print {
+  position: absolute; display: block;
+  width: 58%; aspect-ratio: 4 / 5;
+  padding: 10px 10px 34px;
+  background: #fff;
+  border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 24px 50px rgba(40, 30, 20, .14);
+  transition: transform .7s cubic-bezier(.2,.7,.2,1), box-shadow .5s;
+}
+.hm-print img { width: 100%; height: 100%; object-fit: cover; border-radius: 1px; background: #111; }
+.hm-print.p1 { left: 0;   top: 40px; transform: rotate(-8deg); }
+.hm-print.p2 { right: 0;  top: 0;    transform: rotate(6deg); }
+.hm-print.p3 { left: 21%; top: 70px; transform: rotate(-1.5deg); z-index: 2; }
+.hm-stack:hover .p1 { transform: rotate(-12deg) translate(-26px, 6px); }
+.hm-stack:hover .p2 { transform: rotate(10deg) translate(26px, -4px); }
+.hm-stack:hover .p3 { transform: rotate(0) translateY(-8px); box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 34px 70px rgba(40, 30, 20, .2); }
+.hm-print-cap {
+  position: absolute; left: 12px; right: 12px; bottom: 9px;
+  font-size: 12px; letter-spacing: .5px; color: #555;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* ---- Motto ticker ---- */
+.hm-ticker {
+  margin-top: 120px;
+  border-top: 1px solid #e6e1d9;
+  overflow: hidden;
+  padding: 26px 0 30px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.hm-ticker-track { display: flex; width: max-content; animation: hmTicker 38s linear infinite; }
+.hm-ticker-track > div { display: flex; flex: none; }
+.hm-ticker-track span {
+  display: inline-flex; align-items: center;
+  font-size: clamp(44px, 6.5vw, 92px); font-weight: 200; line-height: 1;
+  text-transform: uppercase; letter-spacing: 2px;
+  color: transparent; -webkit-text-stroke: 1px #c9c2b8;
+  white-space: nowrap;
+}
+.hm-ticker-track span::after {
+  content: ""; width: 12px; height: 12px; border-radius: 50%;
+  background: var(--accent); margin: 0 44px; flex: none;
+}
+.hm-ticker:hover .hm-ticker-track { animation-play-state: paused; }
+@keyframes hmTicker { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .hm-ticker-track { animation: none; } }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 960px) {
@@ -232,6 +328,9 @@ html.no-webgl .hm-ring { display: none; }
 
   .hm-stats-inner { grid-template-columns: 1fr 1fr; row-gap: 32px; padding: 48px 20px; }
   .hm-stat:nth-child(3) { border-left: none; }
+  .hm-stats-inner.three { grid-template-columns: repeat(3, 1fr); }
+  .hm-stats-inner.three .hm-stat { padding: 8px 6px; }
+  .hm-stats-inner.three .hm-stat:nth-child(3) { border-left: 1px solid #26262b; }
   .hm-stat b { font-size: 44px; }
   .hm-stat span { font-size: 11px; letter-spacing: 2px; }
 
@@ -242,11 +341,17 @@ html.no-webgl .hm-ring { display: none; }
   .hm-ring-caption { bottom: 64px; width: 90%; }
   .hm-ring-caption strong { font-size: 18px; }
 
-  .hm-call { padding: 70px 20px; }
-  .hm-call-inner { grid-template-columns: 1fr; gap: 30px; }
-  .hm-call h2 { font-size: 28px; }
-  .hm-call-text p { font-size: 16px; }
-  .hm-motto { font-size: 12px; letter-spacing: 2px; }
+  .hm-call { padding: 80px 0 0; }
+  .hm-call-inner { grid-template-columns: 1fr; gap: 56px; padding: 0 20px; }
+  .hm-call h2 { margin-bottom: 26px; }
+  .hm-call-text { padding-left: 16px; }
+  .hm-call-text p { font-size: 15.5px; }
+  .hm-call-text p:first-child { font-size: 18px; }
+  .hm-stack { height: 340px; max-width: 420px; width: 100%; margin: 0 auto; }
+  .hm-print { padding: 7px 7px 26px; }
+  .hm-print-cap { font-size: 11px; bottom: 6px; }
+  .hm-ticker { margin-top: 70px; padding: 18px 0 22px; }
+  .hm-ticker-track span::after { width: 8px; height: 8px; margin: 0 24px; }
   .hm-hero { min-height: 640px; }
   .hm-hero-content { padding: 100px 4px 90px; }
   .hm-hero-text p { font-size: 14.5px; line-height: 1.65; }
@@ -255,5 +360,5 @@ html.no-webgl .hm-ring { display: none; }
   .hm-hero-actions .btn { min-width: 0; }
   .hm-scroll { display: none; }
   .hm-about-body p { font-size: 16px; }
-  .hm-call-actions .btn { width: 100%; min-width: 0; }
+  .hm-call-actions { gap: 22px; margin-top: 34px; }
 }
