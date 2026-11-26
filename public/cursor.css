@@ -1,0 +1,76 @@
+/* =========================================================
+   Custom cursor — a dot that follows exactly + a ring that trails
+   (only on devices with a real mouse; see cursor.js)
+   ========================================================= */
+html.has-cursor,
+html.has-cursor * { cursor: none !important; }
+
+/* Keep the normal text cursor where people type */
+html.has-cursor :is(input, textarea, select, [contenteditable="true"]) { cursor: auto !important; }
+html.has-cursor :is(input, textarea) { cursor: text !important; }
+
+.cur-dot, .cur-ring {
+  position: fixed; top: 0; left: 0;
+  z-index: 20000;                 /* above the intro animation */
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .3s ease;
+  will-change: transform;
+}
+html.cur-on .cur-dot, html.cur-on .cur-ring { opacity: 1; }
+html.cur-text .cur-dot, html.cur-text .cur-ring { opacity: 0; }
+
+/* Dot */
+.cur-dot i {
+  display: block;
+  width: 8px; height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: #c42f63;
+  transition: transform .25s ease, background .25s ease;
+}
+
+/* Ring */
+.cur-ring i {
+  display: grid; place-items: center;
+  width: 42px; height: 42px;
+  margin: -21px 0 0 -21px;
+  border-radius: 50%;
+  border: 1px solid rgba(215, 52, 93, .42);
+  background: rgba(215, 52, 93, 0);
+  transition:
+    width .4s cubic-bezier(.2, .75, .2, 1),
+    height .4s cubic-bezier(.2, .75, .2, 1),
+    margin .4s cubic-bezier(.2, .75, .2, 1),
+    background .3s ease, border-color .3s ease;
+}
+.cur-label {
+  font: 400 11px "Kanit", sans-serif;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: #fff;
+  opacity: 0; transform: scale(.6);
+  transition: opacity .25s ease, transform .3s ease;
+}
+
+/* Over links / buttons: ring grows with a soft tint, dot shrinks */
+html.cur-hover .cur-ring i {
+  width: 64px; height: 64px; margin: -32px 0 0 -32px;
+  background: rgba(215, 52, 93, .08);
+  border-color: rgba(215, 52, 93, .65);
+}
+html.cur-hover .cur-dot i { transform: scale(.5); }
+
+/* Over artworks / cards: solid pink circle that says "View" */
+html.cur-view .cur-ring i {
+  width: 72px; height: 72px; margin: -36px 0 0 -36px;
+  background: rgba(215, 52, 93, .82);
+  border-color: transparent;
+  backdrop-filter: blur(2px);
+}
+html.cur-view .cur-label { opacity: 1; transform: none; }
+html.cur-view .cur-dot i { transform: scale(0); }
+
+/* Pressing the mouse */
+html.cur-down .cur-ring i { width: 30px; height: 30px; margin: -15px 0 0 -15px; }
+html.cur-down.cur-hover .cur-ring i { width: 52px; height: 52px; margin: -26px 0 0 -26px; }
+html.cur-down.cur-view .cur-ring i { width: 62px; height: 62px; margin: -31px 0 0 -31px; }
